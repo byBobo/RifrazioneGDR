@@ -4,7 +4,7 @@
     <style>
         #canvas {
             position: absolute;
-            top: 50px; /* space for the controls */
+            top: 60px; /* space for the controls */
             left: 5px; /* very very small border */
             right: 5px; /* very very small border */
             bottom: 5px; /* very very small border */
@@ -18,6 +18,9 @@
             justify-content: space-around;
             background-color: #f8f8f8;
             padding: 10px 0;
+        }
+        #colorSelect, button {
+            font-size: 1.2em; /* make the buttons and select bigger */
         }
         #colorSelect option {
             color: black;
@@ -73,7 +76,7 @@
 
     // Set canvas size to window size
     canvas.width = window.innerWidth - 10; // subtracting the small border
-    canvas.height = window.innerHeight - 60; // subtracting the small border and the controls height
+    canvas.height = window.innerHeight - 70; // subtracting the small border and the controls height
 
     var painting = false;
     var color = 'black';
