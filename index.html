@@ -3,14 +3,19 @@
 <head>
     <style>
         #canvas {
-            border: 1px solid black;
-            margin-top: 20px;
+            position: absolute;
+            top: 5px; /* very very small border */
+            left: 5px; /* very very small border */
             touch-action: none; /* to improve drawing on mobile devices */
         }
         #controls {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
-            width: 500px;
+            justify-content: space-around;
+            background-color: #f8f8f8;
+            padding: 10px 0;
         }
         #colorSelect option {
             color: black;
@@ -58,11 +63,15 @@
     <button onclick="resetCanvas()">Reset</button>
 </div>
 
-<canvas id="canvas" width="500" height="500"></canvas>
+<canvas id="canvas"></canvas>
 
 <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
+
+    // Set canvas size to window size
+    canvas.width = window.innerWidth - 10; // subtracting the small border
+    canvas.height = window.innerHeight - 10; // subtracting the small border
 
     var painting = false;
     var color = 'black';
