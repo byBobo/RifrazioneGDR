@@ -56,7 +56,6 @@
     </select>
 
     <button onclick="resetCanvas()">Reset</button>
-    <button onclick="undoLast()">Undo Last</button>
 </div>
 
 <canvas id="canvas" width="500" height="500"></canvas>
@@ -107,27 +106,6 @@
     function resetCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         lines = [];
-    }
-
-    function undoLast() {
-        if (lines.length > 0) {
-            lines.pop();
-            redrawLines();
-        }
-    }
-
-    function redrawLines() {
-        resetCanvas();
-        lines.forEach(function(line) {
-            ctx.beginPath();
-            line.forEach(function(point) {
-                ctx.lineTo(point.x, point.y);
-                ctx.strokeStyle = point.color;
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(point.x, point.y);
-            });
-        });
     }
 
     canvas.addEventListener('mousedown', startDraw);
