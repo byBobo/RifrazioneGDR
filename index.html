@@ -5,6 +5,12 @@
         #canvas {
             border: 1px solid black;
             margin-top: 20px;
+            touch-action: none; /* to improve drawing on mobile devices */
+        }
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
         }
         #colorSelect option {
             color: black;
@@ -37,19 +43,21 @@
 </head>
 <body>
 
-<select id="colorSelect" onchange="changeColor(this.value)">
-    <option value="red">Red</option>
-    <option value="yellow">Yellow</option>
-    <option value="blue">Blue</option>
-    <option value="green">Green</option>
-    <option value="purple">Purple</option>
-    <option value="brown">Brown</option>
-    <option value="grey">Grey</option>
-    <option value="black" selected>Black</option>
-</select>
+<div id="controls">
+    <select id="colorSelect" onchange="changeColor(this.value)">
+        <option value="red">Red</option>
+        <option value="yellow">Yellow</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="purple">Purple</option>
+        <option value="brown">Brown</option>
+        <option value="grey">Grey</option>
+        <option value="black" selected>Black</option>
+    </select>
 
-<button onclick="resetCanvas()">Reset</button>
-<button onclick="undoLast()">Undo Last</button>
+    <button onclick="resetCanvas()">Reset</button>
+    <button onclick="undoLast()">Undo Last</button>
+</div>
 
 <canvas id="canvas" width="500" height="500"></canvas>
 
@@ -125,6 +133,20 @@
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mouseup', endDraw);
     canvas.addEventListener('mousemove', draw);
+
+    // Add event listeners for touch events
+    canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        startDraw(e.touches[0]);
+    }, false);
+    canvas.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        endDraw();
+    }, false);
+    canvas.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        draw(e.touches[0]);
+    }, false);
 
 </script>
 
