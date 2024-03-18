@@ -2,6 +2,12 @@
 <html>
 <head>
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
         #canvas {
             position: absolute;
             top: 60px; /* space for the controls */
@@ -9,6 +15,7 @@
             right: 5px; /* very very small border */
             bottom: 5px; /* very very small border */
             touch-action: none; /* to improve drawing on mobile devices */
+            border: 1px solid black; /* black border */
         }
         #controls {
             position: fixed;
@@ -75,8 +82,8 @@
     var ctx = canvas.getContext('2d');
 
     // Set canvas size to window size
-    canvas.width = window.innerWidth - 10; // subtracting the small border
-    canvas.height = window.innerHeight - 70; // subtracting the small border and the controls height
+    canvas.width = window.innerWidth - 12; // subtracting the small border and the border of the canvas
+    canvas.height = window.innerHeight - 72; // subtracting the small border, the controls height and the border of the canvas
 
     var painting = false;
     var color = 'black';
