@@ -29,47 +29,23 @@
         #colorSelect, button {
             font-size: 1.2em; /* make the buttons and select bigger */
         }
-        #colorSelect option {
-            color: black;
-        }
-        #colorSelect option[value="red"] {
-            color: red;
-        }
-        #colorSelect option[value="yellow"] {
-            color: yellow;
-        }
-        #colorSelect option[value="blue"] {
-            color: blue;
-        }
-        #colorSelect option[value="green"] {
-            color: green;
-        }
-        #colorSelect option[value="purple"] {
-            color: purple;
-        }
-        #colorSelect option[value="brown"] {
-            color: brown;
-        }
-        #colorSelect option[value="grey"] {
-            color: grey;
-        }
-        #colorSelect option[value="black"] {
-            color: black;
-        }
     </style>
 </head>
 <body>
 
 <div id="controls">
+    <button id="getColorButton">Get Color</button>
+
     <select id="colorSelect" onchange="changeColor(this.value)">
-        <option value="red">Red</option>
+        <option value="red" selected>Red</option>
+        <option value="orange">Orange</option>
         <option value="yellow">Yellow</option>
         <option value="blue">Blue</option>
         <option value="green">Green</option>
         <option value="purple">Purple</option>
         <option value="brown">Brown</option>
         <option value="grey">Grey</option>
-        <option value="black" selected>Black</option>
+        <option value="black">Black</option>
     </select>
 
     <button onclick="resetCanvas()">Reset</button>
@@ -86,7 +62,7 @@
     canvas.height = window.innerHeight - 72; // subtracting the small border, the controls height and the border of the canvas
 
     var painting = false;
-    var color = 'black';
+    var color = 'red';
     var lines = [];
     var currentLine = [];
 
@@ -128,6 +104,38 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         lines = [];
     }
+
+    function getAverageColor() {
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var data = imageData.data;
+        var r = 0, g = 0, b = 0;
+        var count = 0;
+
+        for (var i = 0; i < data.length; i += 4) {
+            if (data[i] !== 0 || data[i + 1] !== 0 || data[i + 2] !== 0) { // exclude white pixels
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
+        }
+
+        r /= count;
+        g /= count;
+        b /= count;
+
+        return [Math.round(r), Math.round(g), Math.round(b)];
+    }
+
+    function fillCanvasWithColor(color) {
+        ctx.fillStyle = 'rgb(' + color.join(',') + ')';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    document.getElementById('getColorButton').addEventListener('click', function() {
+        var avgColor = getAverageColor();
+        fillCanvasWithColor(avgColor);
+    });
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mouseup', endDraw);
