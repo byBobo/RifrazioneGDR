@@ -60,6 +60,7 @@
     padding: 0.2em;
     text-align: center;
     background: #fff8e7;
+    min-width:50px;
   }
 
   button {
@@ -84,6 +85,12 @@
     h1 { font-size: 1.5em; }
     button { font-size: 1em; }
   }
+
+  .nav-button {
+    margin-top: 1em;
+    display: block;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -93,6 +100,8 @@
 </header>
 
 <div id="controls">
+    <a href="camera.html"><button class="nav-button">Vai alla Fotocamera</button></a>
+
     <div>
         <label for="colorPicker">Colore di Confronto:</label><br>
         <input type="color" id="colorPicker" value="#ff0000">
@@ -155,8 +164,7 @@
 <canvas id="canvas"></canvas>
 
 <script>
-// Ripreso ed adattato dal codice precedente
-
+// Codice canvas con stesse funzioni di calcolo
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -234,7 +242,6 @@ function updateResults() {
   document.getElementById('selectedColorBox').style.backgroundColor = desiredHex;
 
   const avgColor = calculateAverageColor(avgMethod);
-  // Se la tela è vuota, non calcoliamo distanza
   if(!avgColor) {
     document.getElementById('averageColorBox').style.backgroundColor = '#ffffff';
     document.getElementById('similarity').textContent = 'N/A';
@@ -245,166 +252,17 @@ function updateResults() {
   const selectedColor = hexToRgb(desiredHex);
   const dist = calculateColorDistance(selectedColor, avgColor, distMethod);
 
-  // In questo esempio, distance la interpretiamo come un valore da 0 a max.  
-  // Possiamo mostrare la distanza pura o una "similarità" in base al metodo.
-  // Ma per coerenza, mostriamo semplicemente la distanza calcolata, non come percentuale di similarity.
-  
-  // Se vogliamo mostrare una "similarità" come nell'esempio dato:  
-  // Una forma semplice: consideriamo la distanza euclidea max come da nero a bianco:
-  // maxDistance ≈ 441.67 per l'euclidea. Per uniformità usiamo sempre quel max per avere una percentuale.
   const maxDistance = Math.sqrt(255*255*3); 
   const similarity = 100 * (1 - dist/maxDistance);
 
   document.getElementById('similarity').textContent = similarity.toFixed(2) + '%';
 }
 
-
-// Funzioni calcolo colore medio e distanza
-// Riprese dalla precedente implementazione
-
-function calculateAverageColor(method) {
-  const {imageData, totalPixels} = getImageDataFromCanvas();
-  const data = imageData.data;
-
-  // Filtriamo i pixel bianchi per il calcolo della media.  
-  // Un pixel è considerato "disegnato" se non è (255,255,255).
-  // Se non ci sono pixel diversi dal bianco, return null.
-  let countColored = 0;
-  for(let i=0;i<data.length;i+=4) {
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)) {
-      countColored++;
-    }
-  }
-  if(countColored===0) {
-    return null;
-  }
-
-  if(method === 'rgb') {
-    return averageRGB(data, totalPixels);
-  } else if(method === 'hex') {
-    return averageHex(data, totalPixels);
-  } else if(method === 'lum') {
-    return averageLuminanceWeighted(data, totalPixels);
-  } else if(method === 'hsv') {
-    return averageHSV(data, totalPixels);
-  } else {
-    return averageRGB(data, totalPixels); // fallback
-  }
-}
-
-// Distanza
-function calculateColorDistance(c1, c2, method) {
-  if(method === 'euclidean') {
-    return colorDistanceEuclidean(c1,c2);
-  } else if(method === 'lab') {
-    return colorDistanceLab(c1,c2);
-  } else if(method === 'avgchannels') {
-    return colorDistanceAvgChannels(c1,c2);
-  } else if(method === 'hue') {
-    return colorDistanceHue(c1,c2);
-  } else {
-    return colorDistanceEuclidean(c1,c2); // fallback
-  }
-}
-
-// Funzioni per ottenere imageData dal canvas
 function getImageDataFromCanvas() {
   const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
   const totalPixels = imageData.data.length/4;
   return {imageData, totalPixels};
 }
-
-// Funzioni media colore
-
-function averageRGB(data, totalPixels) {
-  let rSum=0, gSum=0, bSum=0, count=0;
-  for(let i=0; i<data.length; i+=4) {
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)) {
-      rSum+=data[i];gSum+=data[i+1];bSum+=data[i+2];
-      count++;
-    }
-  }
-  if(count===0) return null;
-  return {
-    r: Math.round(rSum/count),
-    g: Math.round(gSum/count),
-    b: Math.round(bSum/count)
-  };
-}
-
-function averageHex(data, totalPixels) {
-  let sum=0, count=0;
-  for(let i=0; i<data.length; i+=4) {
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)) {
-      const val = (data[i]<<16)+(data[i+1]<<8)+data[i+2];
-      sum+=val;count++;
-    }
-  }
-  if(count===0)return null;
-  const avgVal = Math.round(sum/count);
-  return {
-    r: (avgVal>>16)&255,
-    g: (avgVal>>8)&255,
-    b: avgVal&255
-  };
-}
-
-function averageLuminanceWeighted(data, totalPixels) {
-  let rSum=0,gSum=0,bSum=0,wSum=0;
-  for(let i=0; i<data.length; i+=4) {
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)) {
-      const R=data[i],G=data[i+1],B=data[i+2];
-      const L=0.299*R+0.587*G+0.114*B;
-      rSum+=R*L;gSum+=G*L;bSum+=B*L;wSum+=L;
-    }
-  }
-  if(wSum===0)return null;
-  return {
-    r: Math.round(rSum/wSum),
-    g: Math.round(gSum/wSum),
-    b: Math.round(bSum/wSum)
-  };
-}
-
-function averageHSV(data, totalPixels) {
-  let hSum=0,sSum=0,vSum=0,count=0;
-  for(let i=0; i<data.length; i+=4) {
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)) {
-      const R=data[i],G=data[i+1],B=data[i+2];
-      const {h,s,v} = rgbToHsv(R,G,B);
-      hSum+=h;sSum+=s;vSum+=v;count++;
-    }
-  }
-  if(count===0)return null;
-  const hAvg=hSum/count;
-  const sAvg=sSum/count;
-  const vAvg=vSum/count;
-  return hsvToRgb(hAvg,sAvg,vAvg);
-}
-
-// Funzioni distanza colore
-function colorDistanceEuclidean(c1,c2) {
-  return Math.sqrt((c1.r - c2.r)**2+(c1.g - c2.g)**2+(c1.b - c2.b)**2);
-}
-
-function colorDistanceAvgChannels(c1,c2) {
-  return (Math.abs(c1.r-c2.r)+Math.abs(c1.g-c2.g)+Math.abs(c1.b-c2.b))/3;
-}
-
-function colorDistanceHue(c1,c2) {
-  const hsv1=rgbToHsv(c1.r,c1.g,c1.b);
-  const hsv2=rgbToHsv(c2.r,c2.g,c2.b);
-  const dh=Math.abs(hsv1.h - hsv2.h);
-  return Math.min(dh,360 - dh);
-}
-
-function colorDistanceLab(c1,c2) {
-  const lab1=rgbToLab(c1.r,c1.g,c1.b);
-  const lab2=rgbToLab(c2.r,c2.g,c2.b);
-  return Math.sqrt((lab1.L-lab2.L)**2+(lab1.a-lab2.a)**2+(lab1.b-lab2.b)**2);
-}
-
-// Conversioni e helper
 
 function hexToRgb(hex) {
   const stripped=hex.replace('#','');
@@ -415,11 +273,98 @@ function hexToRgb(hex) {
   return {r,g,b};
 }
 
-function rgbToHsv(r,g,b) {
+// funzioni di calcolo media e distanza come nella camera.html
+
+function averageRGB(data, totalPixels) {
+  let rSum=0,gSum=0,bSum=0,count=0;
+  for(let i=0;i<data.length;i+=4){
+    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+      rSum+=data[i];gSum+=data[i+1];bSum+=data[i+2];count++;
+    }
+  }
+  if(count===0)return null;
+  return {r:Math.round(rSum/count),g:Math.round(gSum/count),b:Math.round(bSum/count)};
+}
+
+function averageHex(data, totalPixels) {
+  let sum=0,count=0;
+  for(let i=0;i<data.length;i+=4){
+    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+      const val=(data[i]<<16)+(data[i+1]<<8)+data[i+2];
+      sum+=val;count++;
+    }
+  }
+  if(count===0)return null;
+  const avgVal=Math.round(sum/count);
+  return {r:(avgVal>>16)&255,g:(avgVal>>8)&255,b:avgVal&255};
+}
+
+function averageLuminanceWeighted(data, totalPixels){
+  let rSum=0,gSum=0,bSum=0,wSum=0;
+  for(let i=0;i<data.length;i+=4){
+    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+      const R=data[i],G=data[i+1],B=data[i+2];
+      const L=0.299*R+0.587*G+0.114*B;
+      rSum+=R*L;gSum+=G*L;bSum+=B*L;wSum+=L;
+    }
+  }
+  if(wSum===0)return null;
+  return {r:Math.round(rSum/wSum),g:Math.round(gSum/wSum),b:Math.round(bSum/wSum)};
+}
+
+function averageHSV(data, totalPixels){
+  let hSum=0,sSum=0,vSum=0,count=0;
+  for(let i=0;i<data.length;i+=4){
+    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+      const R=data[i],G=data[i+1],B=data[i+2];
+      const {h,s,v}=rgbToHsv(R,G,B);
+      hSum+=h;sSum+=s;vSum+=v;count++;
+    }
+  }
+  if(count===0)return null;
+  const hAvg=hSum/count,sAvg=sSum/count,vAvg=vSum/count;
+  return hsvToRgb(hAvg,sAvg,vAvg);
+}
+
+function calculateColorDistance(c1, c2, method) {
+  if(method === 'euclidean') {
+    return colorDistanceEuclidean(c1,c2);
+  } else if(method === 'lab') {
+    return colorDistanceLab(c1,c2);
+  } else if(method === 'avgchannels') {
+    return colorDistanceAvgChannels(c1,c2);
+  } else if(method === 'hue') {
+    return colorDistanceHue(c1,c2);
+  } else {
+    return colorDistanceEuclidean(c1,c2); 
+  }
+}
+
+function colorDistanceEuclidean(c1,c2){
+  return Math.sqrt((c1.r-c2.r)**2+(c1.g-c2.g)**2+(c1.b-c2.b)**2);
+}
+
+function colorDistanceAvgChannels(c1,c2){
+  return (Math.abs(c1.r-c2.r)+Math.abs(c1.g-c2.g)+Math.abs(c1.b-c2.b))/3;
+}
+
+function colorDistanceHue(c1,c2){
+  const hsv1=rgbToHsv(c1.r,c1.g,c1.b);
+  const hsv2=rgbToHsv(c2.r,c2.g,c2.b);
+  const dh=Math.abs(hsv1.h-hsv2.h);
+  return Math.min(dh,360-dh);
+}
+
+function colorDistanceLab(c1,c2){
+  const lab1=rgbToLab(c1.r,c1.g,c1.b);
+  const lab2=rgbToLab(c2.r,c2.g,c2.b);
+  return Math.sqrt((lab1.L-lab2.L)**2+(lab1.a-lab2.a)**2+(lab1.b-lab2.b)**2);
+}
+
+function rgbToHsv(r,g,b){
   r/=255;g/=255;b/=255;
   const max=Math.max(r,g,b),min=Math.min(r,g,b);
-  let h,s,v=max;
-  const d=max-min;
+  let h,s,v=max;const d=max-min;
   s=max===0?0:d/max;
   if(max===min){
     h=0;
@@ -434,7 +379,7 @@ function rgbToHsv(r,g,b) {
   return {h:h,s:s,v:v};
 }
 
-function hsvToRgb(h,s,v) {
+function hsvToRgb(h,s,v){
   let r,g,b;
   const c=v*s;
   const x=c*(1-Math.abs((h/60)%2-1));
@@ -450,7 +395,7 @@ function hsvToRgb(h,s,v) {
   return {r:Math.round(r),g:Math.round(g),b:Math.round(b)};
 }
 
-function rgbToLab(R,G,B) {
+function rgbToLab(R,G,B){
   let r=R/255;let g=G/255;let b=B/255;
   r=(r>0.04045)?Math.pow((r+0.055)/1.055,2.4):r/12.92;
   g=(g>0.04045)?Math.pow((g+0.055)/1.055,2.4):g/12.92;

@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Fantasy Card Game - Foto Colori</title>
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-
 <style>
   body {
     margin: 0;
@@ -15,11 +14,8 @@
     color: #3b2e20;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     min-height: 100vh;
   }
-
   header {
     width: 100%;
     padding: 1em;
@@ -27,12 +23,10 @@
     text-align: center;
     border-bottom: 4px solid #3b2e20;
   }
-
   h1 {
     margin: 0;
     font-size: 2em;
   }
-
   .container {
     max-width: 600px;
     width: 90%;
@@ -42,18 +36,15 @@
     border: 4px solid #3b2e20;
     border-radius: 10px;
   }
-
   .field {
     display: flex;
     flex-direction: column;
     margin-bottom: 1em;
   }
-
   label {
     margin-bottom: 0.5em;
     font-size: 1.2em;
   }
-
   input[type="color"] {
     width: 100%;
     height: 3em;
@@ -61,7 +52,6 @@
     border-radius: 5px;
     cursor: pointer;
   }
-
   button {
     background: #d6c5a3;
     border: 2px solid #3b2e20;
@@ -72,43 +62,39 @@
     transition: background 0.3s;
     margin-right: 0.5em;
   }
-
   button:hover {
     background: #ede3ca;
   }
-
   #preview {
     margin-top: 1em;
     max-width: 100%;
     border: 2px dashed #3b2e20;
   }
-
   #results {
     margin-top: 1em;
     padding: 1em;
     border: 2px dashed #3b2e20;
     background: #fff8e7;
   }
-
   .row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
   }
-
   .row > * {
     margin: 0.5em;
   }
-
   video {
     max-width: 100%;
     border: 2px dashed #3b2e20;
     display: none;
   }
-
   @media (max-width: 600px) {
     h1 { font-size: 1.5em; }
     button { font-size: 1em; }
+  }
+  .nav-button {
+    margin-top: 1em;
   }
 </style>
 </head>
@@ -119,14 +105,13 @@
 </header>
 
 <div class="container">
-
-  <!-- Selezione colore di partenza -->
+  <a href="canvas.html"><button class="nav-button">Vai al Canvas</button></a>
+  
   <div class="field">
     <label for="colorPicker">Seleziona un colore dalla palette:</label>
     <input type="color" id="colorPicker" value="#ff0000"/>
   </div>
 
-  <!-- Scelta metodi di calcolo -->
   <div class="field">
     <label>Metodo Calcolo Media Colore:</label>
     <select id="averageMethod">
@@ -147,7 +132,6 @@
     </select>
   </div>
 
-  <!-- Controlli per foto -->
   <div class="field row">
     <button id="cameraIconBtn" title="Apri Webcam" style="font-size:1.5em;">📷</button>
     <button id="captureFromVideo" style="display:none;">Cattura Foto da Webcam</button>
@@ -163,7 +147,6 @@
 </div>
 
 <script>
-// Elementi
 const cameraBtn = document.getElementById('cameraBtn');
 const cameraInput = document.getElementById('cameraInput');
 const preview = document.getElementById('preview');
@@ -175,7 +158,6 @@ const video = document.getElementById('video');
 const cameraIconBtn = document.getElementById('cameraIconBtn');
 const captureFromVideoBtn = document.getElementById('captureFromVideo');
 
-let currentImageData = null; // Salviamo qui l'immagine del preview
 let stream = null;
 
 cameraBtn.addEventListener('click', () => {
@@ -195,12 +177,16 @@ cameraInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-// Attivazione webcam
 cameraIconBtn.addEventListener('click', async () => {
   if(!stream) {
     try {
-      stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false});
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" }, 
+        audio:false
+      });
       video.srcObject = stream;
+      video.muted = true;
+      await video.play();
       video.style.display = 'block';
       captureFromVideoBtn.style.display = 'inline-block';
     } catch (err) {
@@ -209,7 +195,6 @@ cameraIconBtn.addEventListener('click', async () => {
   }
 });
 
-// Cattura foto dalla webcam
 captureFromVideoBtn.addEventListener('click', () => {
   if(!video.srcObject) return;
   const canvas = document.createElement('canvas');
@@ -225,10 +210,10 @@ colorPicker.addEventListener('input', updateResults);
 averageMethodSelect.addEventListener('change', updateResults);
 distanceMethodSelect.addEventListener('change', updateResults);
 
-// Funzione principale che ricalcola tutto quando c'è un cambiamento
 function updateResults() {
   if(!preview.src) return;
   const avgColor = calculateAverageColor(preview, averageMethodSelect.value);
+  if(!avgColor) return;
   const selectedColor = hexToRgb(colorPicker.value);
   const dist = calculateColorDistance(selectedColor, avgColor, distanceMethodSelect.value);
 
@@ -242,128 +227,6 @@ function updateResults() {
   `;
 }
 
-function calculateAverageColor(imgElement, method) {
-  const {imageData, totalPixels} = getImageDataFromElement(imgElement);
-  const data = imageData.data;
-  
-  if(method === 'rgb') {
-    return averageRGB(data, totalPixels);
-  } else if(method === 'hex') {
-    return averageHex(data, totalPixels);
-  } else if(method === 'lum') {
-    return averageLuminanceWeighted(data, totalPixels);
-  } else if(method === 'hsv') {
-    return averageHSV(data, totalPixels);
-  } else {
-    return averageRGB(data, totalPixels); // fallback
-  }
-}
-
-function calculateColorDistance(c1, c2, method) {
-  if(method === 'euclidean') {
-    return colorDistanceEuclidean(c1,c2);
-  } else if(method === 'lab') {
-    return colorDistanceLab(c1,c2);
-  } else if(method === 'avgchannels') {
-    return colorDistanceAvgChannels(c1,c2);
-  } else if(method === 'hue') {
-    return colorDistanceHue(c1,c2);
-  } else {
-    return colorDistanceEuclidean(c1,c2); // fallback
-  }
-}
-
-// Funzioni per calcolo media RGB
-function averageRGB(data, totalPixels) {
-  let rSum=0, gSum=0, bSum=0;
-  for(let i=0; i<data.length; i+=4) {
-    rSum += data[i];
-    gSum += data[i+1];
-    bSum += data[i+2];
-  }
-  return {
-    r: Math.round(rSum/totalPixels),
-    g: Math.round(gSum/totalPixels),
-    b: Math.round(bSum/totalPixels)
-  };
-}
-
-// Funzione Media Hex
-function averageHex(data, totalPixels) {
-  let sum = 0;
-  for(let i=0; i<data.length; i+=4) {
-    const val = (data[i]<<16) + (data[i+1]<<8) + data[i+2];
-    sum += val;
-  }
-  const avgVal = Math.round(sum/totalPixels);
-  return {
-    r: (avgVal>>16)&255,
-    g: (avgVal>>8)&255,
-    b: avgVal&255
-  };
-}
-
-// Funzione Media Pesata Luminanza
-function averageLuminanceWeighted(data, totalPixels) {
-  let rSum=0, gSum=0, bSum=0, wSum=0;
-  for(let i=0; i<data.length; i+=4) {
-    const R = data[i], G = data[i+1], B = data[i+2];
-    const L = 0.299*R + 0.587*G + 0.114*B; 
-    rSum += R * L;
-    gSum += G * L;
-    bSum += B * L;
-    wSum += L;
-  }
-  if(wSum === 0) wSum = 1; // per evitare div 0
-  return {
-    r: Math.round(rSum/wSum),
-    g: Math.round(gSum/wSum),
-    b: Math.round(bSum/wSum)
-  };
-}
-
-// Funzione Media HSV
-function averageHSV(data, totalPixels) {
-  let hSum=0, sSum=0, vSum=0;
-  for(let i=0; i<data.length; i+=4) {
-    const R = data[i], G = data[i+1], B = data[i+2];
-    const {h, s, v} = rgbToHsv(R,G,B);
-    hSum += h;
-    sSum += s;
-    vSum += v;
-  }
-  const hAvg = hSum/totalPixels;
-  const sAvg = sSum/totalPixels;
-  const vAvg = vSum/totalPixels;
-  return hsvToRgb(hAvg, sAvg, vAvg);
-}
-
-// Distanza Euclidea
-function colorDistanceEuclidean(c1,c2) {
-  return Math.sqrt((c1.r - c2.r)**2 + (c1.g - c2.g)**2 + (c1.b - c2.b)**2);
-}
-
-// Distanza media canali
-function colorDistanceAvgChannels(c1,c2) {
-  return ((Math.abs(c1.r-c2.r) + Math.abs(c1.g-c2.g) + Math.abs(c1.b-c2.b))/3);
-}
-
-// Distanza Hue (solo differenza Hue)
-function colorDistanceHue(c1,c2) {
-  const hsv1 = rgbToHsv(c1.r,c1.g,c1.b);
-  const hsv2 = rgbToHsv(c2.r,c2.g,c2.b);
-  const dh = Math.abs(hsv1.h - hsv2.h);
-  return Math.min(dh, 360 - dh);
-}
-
-// Distanza Lab
-function colorDistanceLab(c1,c2) {
-  const lab1 = rgbToLab(c1.r,c1.g,c1.b);
-  const lab2 = rgbToLab(c2.r,c2.g,c2.b);
-  return Math.sqrt((lab1.L-lab2.L)**2 + (lab1.a-lab2.a)**2 + (lab1.b-lab2.b)**2);
-}
-
-// Utility 
 function getImageDataFromElement(imgElement) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -384,33 +247,139 @@ function hexToRgb(hex) {
   return {r,g,b};
 }
 
-// Conversioni Colore
+function calculateAverageColor(imgElement, method) {
+  const {imageData, totalPixels} = getImageDataFromElement(imgElement);
+  const data = imageData.data;
+  
+  if(method === 'rgb') {
+    return averageRGB(data, totalPixels);
+  } else if(method === 'hex') {
+    return averageHex(data, totalPixels);
+  } else if(method === 'lum') {
+    return averageLuminanceWeighted(data, totalPixels);
+  } else if(method === 'hsv') {
+    return averageHSV(data, totalPixels);
+  } else {
+    return averageRGB(data, totalPixels); 
+  }
+}
+
+function calculateColorDistance(c1, c2, method) {
+  if(method === 'euclidean') {
+    return colorDistanceEuclidean(c1,c2);
+  } else if(method === 'lab') {
+    return colorDistanceLab(c1,c2);
+  } else if(method === 'avgchannels') {
+    return colorDistanceAvgChannels(c1,c2);
+  } else if(method === 'hue') {
+    return colorDistanceHue(c1,c2);
+  } else {
+    return colorDistanceEuclidean(c1,c2); 
+  }
+}
+
+// Metodi di calcolo media
+function averageRGB(data, totalPixels) {
+  let rSum=0, gSum=0, bSum=0;
+  for(let i=0; i<data.length; i+=4) {
+    rSum += data[i];
+    gSum += data[i+1];
+    bSum += data[i+2];
+  }
+  return {
+    r: Math.round(rSum/ (totalPixels)),
+    g: Math.round(gSum/ (totalPixels)),
+    b: Math.round(bSum/ (totalPixels))
+  };
+}
+
+function averageHex(data, totalPixels) {
+  let sum=0;
+  for(let i=0; i<data.length; i+=4) {
+    const val = (data[i]<<16)+(data[i+1]<<8)+data[i+2];
+    sum+=val;
+  }
+  const avgVal = Math.round(sum/totalPixels);
+  return {
+    r:(avgVal>>16)&255,
+    g:(avgVal>>8)&255,
+    b:avgVal&255
+  };
+}
+
+function averageLuminanceWeighted(data, totalPixels) {
+  let rSum=0,gSum=0,bSum=0,wSum=0;
+  for(let i=0; i<data.length; i+=4) {
+    const R=data[i],G=data[i+1],B=data[i+2];
+    const L=0.299*R+0.587*G+0.114*B;
+    rSum+=R*L;gSum+=G*L;bSum+=B*L;wSum+=L;
+  }
+  if(wSum===0) wSum=1;
+  return {
+    r: Math.round(rSum/wSum),
+    g: Math.round(gSum/wSum),
+    b: Math.round(bSum/wSum)
+  };
+}
+
+function averageHSV(data, totalPixels) {
+  let hSum=0,sSum=0,vSum=0;
+  for(let i=0;i<data.length;i+=4) {
+    const R=data[i],G=data[i+1],B=data[i+2];
+    const {h,s,v}=rgbToHsv(R,G,B);
+    hSum+=h;sSum+=s;vSum+=v;
+  }
+  const hAvg = hSum/(totalPixels);
+  const sAvg = sSum/(totalPixels);
+  const vAvg = vSum/(totalPixels);
+  return hsvToRgb(hAvg,sAvg,vAvg);
+}
+
+// Distanze
+function colorDistanceEuclidean(c1,c2) {
+  return Math.sqrt((c1.r - c2.r)**2+(c1.g - c2.g)**2+(c1.b - c2.b)**2);
+}
+function colorDistanceAvgChannels(c1,c2) {
+  return (Math.abs(c1.r-c2.r)+Math.abs(c1.g-c2.g)+Math.abs(c1.b-c2.b))/3;
+}
+function colorDistanceHue(c1,c2) {
+  const hsv1=rgbToHsv(c1.r,c1.g,c1.b);
+  const hsv2=rgbToHsv(c2.r,c2.g,c2.b);
+  const dh=Math.abs(hsv1.h - hsv2.h);
+  return Math.min(dh,360 - dh);
+}
+function colorDistanceLab(c1,c2) {
+  const lab1=rgbToLab(c1.r,c1.g,c1.b);
+  const lab2=rgbToLab(c2.r,c2.g,c2.b);
+  return Math.sqrt((lab1.L-lab2.L)**2+(lab1.a-lab2.a)**2+(lab1.b-lab2.b)**2);
+}
+
+// Conversioni
 function rgbToHsv(r,g,b) {
   r/=255;g/=255;b/=255;
-  const max = Math.max(r,g,b), min = Math.min(r,g,b);
-  let h,s,v = max;
-  const d = max - min;
-  s = max === 0 ? 0 : d/max;
-  if(max === min) {
-    h = 0;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);
+  let h,s,v=max; const d=max-min;
+  s=max===0?0:d/max;
+  if(max===min){
+    h=0;
   } else {
     switch(max){
-      case r: h=(g-b)/d + (g<b?6:0);break;
-      case g: h=(b-r)/d+2; break;
-      case b: h=(r-g)/d+4; break;
+      case r:h=(g-b)/d+(g<b?6:0);break;
+      case g:h=(b-r)/d+2;break;
+      case b:h=(r-g)/d+4;break;
     }
     h*=60;
   }
-  return {h:h, s:s, v:v};
+  return {h:h,s:s,v:v};
 }
 
 function hsvToRgb(h,s,v) {
-  let r, g, b;
-  const c = v*s;
-  const x = c*(1 - Math.abs((h/60)%2-1));
-  const m = v-c;
-  let r_, g_, b_;
-  if(h<60) {r_=c; g_=x; b_=0;}
+  let r,g,b;
+  const c=v*s;
+  const x=c*(1-Math.abs((h/60)%2-1));
+  const m=v-c;
+  let r_,g_,b_;
+  if(h<60){r_=c;g_=x;b_=0;}
   else if(h<120){r_=x;g_=c;b_=0;}
   else if(h<180){r_=0;g_=c;b_=x;}
   else if(h<240){r_=0;g_=x;b_=c;}
@@ -420,36 +389,29 @@ function hsvToRgb(h,s,v) {
   return {r:Math.round(r),g:Math.round(g),b:Math.round(b)};
 }
 
-// Conversione RGB -> XYZ -> Lab (approssimata, CIE76)
 function rgbToLab(R,G,B) {
-  // normalizzazione
-  let r = R/255; let g = G/255; let b = B/255;
+  let r=R/255;let g=G/255;let b=B/255;
+  r=(r>0.04045)?Math.pow((r+0.055)/1.055,2.4):r/12.92;
+  g=(g>0.04045)?Math.pow((g+0.055)/1.055,2.4):g/12.92;
+  b=(b>0.04045)?Math.pow((b+0.055)/1.055,2.4):b/12.92;
 
-  // SRGB to linear
-  r = (r > 0.04045)? Math.pow((r+0.055)/1.055,2.4): r/12.92;
-  g = (g > 0.04045)? Math.pow((g+0.055)/1.055,2.4): g/12.92;
-  b = (b > 0.04045)? Math.pow((b+0.055)/1.055,2.4): b/12.92;
+  const X=r*0.4124+g*0.3576+b*0.1805;
+  const Y=r*0.2126+g*0.7152+b*0.0722;
+  const Z=r*0.0193+g*0.1192+b*0.9505;
 
-  // linear RGB to XYZ
-  const X = r*0.4124 + g*0.3576 + b*0.1805;
-  const Y = r*0.2126 + g*0.7152 + b*0.0722;
-  const Z = r*0.0193 + g*0.1192 + b*0.9505;
+  let x=X/0.95047;
+  let y=Y/1.00000;
+  let z=Z/1.08883;
 
-  // Normalize for D65
-  let x = X/0.95047;
-  let y = Y/1.00000;
-  let z = Z/1.08883;
+  x=(x>0.008856)?Math.pow(x,1/3):(7.787*x)+(16/116);
+  y=(y>0.008856)?Math.pow(y,1/3):(7.787*y)+(16/116);
+  z=(z>0.008856)?Math.pow(z,1/3):(7.787*z)+(16/116);
 
-  x = (x>0.008856)? Math.pow(x,1/3) : (7.787*x)+(16/116);
-  y = (y>0.008856)? Math.pow(y,1/3) : (7.787*y)+(16/116);
-  z = (z>0.008856)? Math.pow(z,1/3) : (7.787*z)+(16/116);
-
-  const L = (116*y)-16;
-  const a = 500*(x-y);
-  const b2 = 200*(y-z);
+  const L=(116*y)-16;
+  const a=500*(x-y);
+  const b2=200*(y-z);
   return {L,a,b:b2};
 }
-
 </script>
 </body>
 </html>
