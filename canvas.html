@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Colori Arcani - Disegno</title>
+<title>Rifrazione - Canvas</title>
 
 <style>
   body {
@@ -146,10 +146,10 @@
 <body>
 
 <header>
-  <h1>Colori Arcani</h1>
-  <h2>Disegno</h2>
+  <h1>Rifrazione</h1>
+  <h2>Modalità canvas</h2>
   <nav>
-    <a href="camera.html">Fotocamera</a>
+    <a href="camera.html" style="display: block; text-align: right;">Modalità foto</a>
   </nav>
 </header>
 
@@ -179,34 +179,12 @@
 
   <div class="colore-disegnare">
     <label>Colore per Disegnare:</label>
-    <select id="drawColorPreset">
-      <option value="#FF0000">Red</option>
-      <option value="#FFA500">Orange</option>
-      <option value="#FFFF00">Yellow</option>
-      <option value="#0000FF">Blue</option>
-      <option value="#008000">Green</option>
-      <option value="#800080">Purple</option>
-      <option value="#A52A2A">Brown</option>
-      <option value="#808080">Grey</option>
-      <option value="other">Other...</option>
-    </select>
-    <input type="color" id="drawColorOther" style="display:none" value="#000000">
+    <input type="color" id="drawColorOther" value="#000000">
   </div>
 
   <div class="colore-confronto">
     <label>Colore di Confronto:</label>
-    <select id="confrontoColorPreset">
-      <option value="#FF0000">Red</option>
-      <option value="#FFA500">Orange</option>
-      <option value="#FFFF00">Yellow</option>
-      <option value="#0000FF">Blue</option>
-      <option value="#008000">Green</option>
-      <option value="#800080">Purple</option>
-      <option value="#A52A2A">Brown</option>
-      <option value="#808080">Grey</option>
-      <option value="other">Other...</option>
-    </select>
-    <input type="color" id="confrontoColorOther" style="display:none" value="#ff0000">
+    <input type="color" id="confrontoColorOther" value="#ff0000">
   </div>
 
   <div class="average-distance">
@@ -250,30 +228,8 @@ const drawOther = document.getElementById('drawColorOther');
 const confrontoPreset = document.getElementById('confrontoColorPreset');
 const confrontoOther = document.getElementById('confrontoColorOther');
 
-drawPreset.addEventListener('change', function(e) {
-  if(e.target.value === 'other') {
-    drawOther.style.display = 'inline-block';
-  } else {
-    drawOther.style.display = 'none';
-    drawOther.value = e.target.value;
-  }
-  drawColor = drawOther.value;
-  updateResults();
-});
-
 drawOther.addEventListener('input', function(e) {
   drawColor = e.target.value;
-  updateResults();
-});
-
-confrontoPreset.addEventListener('change', function(e){
-  if(e.target.value === 'other') {
-    confrontoOther.style.display = 'inline-block';
-  } else {
-    confrontoOther.style.display = 'none';
-    confrontoOther.value = e.target.value;
-  }
-  confrontoColor = confrontoOther.value;
   updateResults();
 });
 
