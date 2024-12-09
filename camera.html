@@ -265,18 +265,7 @@
 <div class="color-controls">
   <div class="colore-confronto">
     <label>Colore di Confronto:</label>
-    <select id="confrontoColorPreset">
-      <option value="#FF0000">Red</option>
-      <option value="#FFA500">Orange</option>
-      <option value="#FFFF00">Yellow</option>
-      <option value="#0000FF">Blue</option>
-      <option value="#008000">Green</option>
-      <option value="#800080">Purple</option>
-      <option value="#A52A2A">Brown</option>
-      <option value="#808080">Grey</option>
-      <option value="other">Other...</option>
-    </select>
-    <input type="color" id="confrontoColorOther" style="display:none" value="#ff0000">
+    <input type="color" id="confrontoColorOther" value="#ff0000">
   </div>
 
   <div class="camera-controls">
@@ -312,7 +301,6 @@
     let stream = null;
     let capturedDataURL = null;
     
-    const confrontoPreset = document.getElementById('confrontoColorPreset');
     const confrontoOther = document.getElementById('confrontoColorOther');
     const averageMethodSelect = document.getElementById('averageMethod');
     const distanceMethodSelect = document.getElementById('distanceMethod');
@@ -325,17 +313,6 @@
     const video = document.getElementById('video');
     const fileInput = document.getElementById('fileInput');
     const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
-    
-    confrontoPreset.addEventListener('change', function(e){
-      if(e.target.value === 'other') {
-        confrontoOther.style.display = 'inline-block';
-      } else {
-        confrontoOther.style.display = 'none';
-        confrontoOther.value = e.target.value;
-      }
-      confrontoColor = confrontoOther.value;
-      updateResults();
-    });
     
     confrontoOther.addEventListener('input', function(e) {
       confrontoColor = e.target.value;
@@ -396,25 +373,25 @@
       cameraModal.style.display = 'none';
     }
     
-    function updateResults() {
-      if(!photoPreview.src) return;
-      const avgColor = calculateAverageColor(photoPreview, averageMethodSelect.value);
-      if(!avgColor) {
-        results.innerHTML = "<p>Nessuna immagine disponibile per il calcolo.</p>";
-        return;
-      }
-      const selectedColor = hexToRgb(confrontoColor);
-      const dist = calculateColorDistance(selectedColor, avgColor, distanceMethodSelect.value);
+    // function updateResults() {
+    //   if(!photoPreview.src) return;
+    //   const avgColor = calculateAverageColor(photoPreview, averageMethodSelect.value);
+    //   if(!avgColor) {
+    //     results.innerHTML = "<p>Nessuna immagine disponibile per il calcolo.</p>";
+    //     return;
+    //   }
+    //   const selectedColor = hexToRgb(confrontoColor);
+    //   const dist = calculateColorDistance(selectedColor, avgColor, distanceMethodSelect.value);
     
-      results.innerHTML = `
-        <p><strong>Colore di Confronto:</strong> <span style="display:inline-block;width:20px;height:20px;background:${confrontoColor};"></span> ${confrontoColor}</p>
-        <p><strong>Colore Medio (${averageMethodSelect.value}):</strong> 
-          <span style="display:inline-block;width:20px;height:20px;background:rgb(${avgColor.r},${avgColor.g},${avgColor.b});"></span> 
-          rgb(${avgColor.r},${avgColor.g},${avgColor.b})
-        </p>
-        <p><strong>Distanza (${distanceMethodSelect.value}):</strong> ${dist.toFixed(2)}</p>
-      `;
-    }
+    //   results.innerHTML = `
+    //     <p><strong>Colore di Confronto:</strong> <span style="display:inline-block;width:20px;height:20px;background:${confrontoColor};"></span> ${confrontoColor}</p>
+    //     <p><strong>Colore Medio (${averageMethodSelect.value}):</strong> 
+    //       <span style="display:inline-block;width:20px;height:20px;background:rgb(${avgColor.r},${avgColor.g},${avgColor.b});"></span> 
+    //       rgb(${avgColor.r},${avgColor.g},${avgColor.b})
+    //     </p>
+    //     <p><strong>Distanza (${distanceMethodSelect.value}):</strong> ${dist.toFixed(2)}</p>
+    //   `;
+    // }
     
     function getImageDataFromElement(imgElement) {
       const canvas = document.createElement('canvas');
@@ -591,6 +568,42 @@
       const b2=200*(y-z);
       return {L,a,b:b2};
     }
+
+    function hexToRgbString(hex) {
+      const rgb = hexToRgb(hex);
+      return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+    }
+
+    function rgbToHexString(rgb) {
+      return `#${((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1).toUpperCase()}`;
+    }
+
+    function calculateColorDistancePercentage(distance) {
+      const maxDistance = Math.sqrt(3 * Math.pow(255, 2));
+      return ((distance / maxDistance) * 100).toFixed(2);
+    }
+
+    function updateResults() {
+      if (!photoPreview.src) return;
+      const avgColor = calculateAverageColor(photoPreview, averageMethodSelect.value);
+      if (!avgColor) {
+        results.innerHTML = "<p>Nessuna immagine disponibile per il calcolo.</p>";
+        return;
+      }
+      const selectedColor = hexToRgb(confrontoColor);
+      const dist = calculateColorDistance(selectedColor, avgColor, distanceMethodSelect.value);
+      const distPercentage = calculateColorDistancePercentage(dist);
+
+      results.innerHTML = `
+        <p><strong>Colore di Confronto:</strong> <span style="display:inline-block;width:20px;height:20px;background:${confrontoColor};"></span> ${confrontoColor} - ${hexToRgbString(confrontoColor)})</p>
+        <p><strong>Colore Medio (${averageMethodSelect.value}):</strong> 
+          <span style="display:inline-block;width:20px;height:20px;background:rgb(${avgColor.r},${avgColor.g},${avgColor.b});"></span> 
+          ${rgbToHexString(avgColor)} - rgb(${avgColor.r}, ${avgColor.g}, ${avgColor.b})
+        </p>
+        <p><strong>Distanza (${distanceMethodSelect.value}):</strong> ${dist.toFixed(2)} (${distPercentage}%)</p>
+      `;
+    }
+
     
     // Imposta valore di default
     confrontoOther.value = "#ff0000";
