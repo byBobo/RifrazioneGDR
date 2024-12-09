@@ -352,8 +352,9 @@ function updateResults() {
   const selectedColor = hexToRgb(confrontoColor);
   const dist = calculateColorDistance(selectedColor, avgColor, distMethod);
   const maxDistance = Math.sqrt(255*255*3); 
-  const similarity = 100 * (1 - dist/maxDistance);
-  document.getElementById('similarity').textContent = similarity.toFixed(2) + '%';
+  // const similarity = 100 * (1 - dist/maxDistance);
+  // document.getElementById('similarity').textContent = similarity.toFixed(2) + '%';
+  document.getElementById('similarity').textContent = dist.toFixed(2);
 }
 
 function getImageDataFromCanvas() {
