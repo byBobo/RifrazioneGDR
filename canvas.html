@@ -9,78 +9,101 @@
   body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-    background: #fff;
-    color: #000;
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+    color: #333;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
   }
 
   header {
-    padding: 1em;
-    border-bottom: 1px solid #ccc;
+    padding: 1.5em;
+    border-bottom: 2px solid #ddd;
     text-align: center;
+    background: #f0f0f0;
   }
 
   header h1 {
     margin: 0;
-    font-size: 1.5em;
-    font-weight: normal;
+    font-size: 2em;
+    font-weight: bold;
+    color: #444;
   }
 
   header h2 {
     margin: 0.3em 0 0;
     font-size: 1.2em;
     font-weight: normal;
-    color: #333;
+    color: #666;
   }
 
   nav {
-    margin-top: 0.5em;
+    margin-top: 1em;
   }
 
   nav a {
     text-decoration: none;
-    color: #0066cc;
+    color: #0077cc;
     font-size: 0.9em;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  nav a:hover {
+    color: #005fa3;
   }
 
   .settings {
     display: flex;
     flex-wrap: wrap;
-    align-items: center; 
-    padding: 0.5em;
-    border-bottom: 1px solid #ccc;
-    gap: 1em;
+    align-items: center;
+    padding: 1em;
+    border-bottom: 2px solid #ddd;
+    gap: 1.5em;
+    background: #fff;
   }
 
   .settings label {
     margin-right: 0.5em;
-    font-size: 0.9em;
+    font-size: 0.95em;
+    color: #333;
   }
 
   .color-controls {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    padding: 0.5em;
-    border-bottom: 1px solid #ccc;
+    padding: 1em;
+    border-bottom: 2px solid #ddd;
     gap: 2em;
+    background: #fff;
   }
 
   .colore-disegnare, .colore-confronto {
     display: flex;
     flex-direction: column;
-    gap: 0.3em;
+    gap: 0.5em;
   }
 
   .colore-disegnare label, .colore-confronto label {
-    font-size: 0.9em;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #444;
   }
 
   select, input[type="color"] {
-    font-size: 0.9em;
+    font-size: 1em;
+    padding: 0.3em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s;
+  }
+
+  select:focus, input[type="color"]:focus {
+    border-color: #0077cc;
+    outline: none;
   }
 
   .average-distance {
@@ -94,45 +117,56 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 0.9em;
+    font-size: 0.95em;
   }
 
   #averageColorBox {
-    width: 50px; 
-    height: 20px; 
-    border: 1px solid #000;
+    width: 60px;
+    height: 30px;
+    border: 2px solid #aaa;
     margin-top: 0.3em;
   }
 
   #similarity {
-    border: 1px solid #000;
-    padding: 0.2em 0.5em;
+    border: 2px solid #aaa;
+    padding: 0.3em 0.5em;
     text-align: center;
     background: #f9f9f9;
     margin-top: 0.3em;
-    font-size: 0.9em;
-    min-width:50px;
+    font-size: 1em;
+    min-width: 60px;
   }
 
   #resetButton {
-    margin: 0.5em;
-    background: #eee;
-    border: 1px solid #ccc;
-    padding: 0.5em 1em;
-    font-size: 0.9em;
+    margin: 1em auto;
+    display: block;
+    background: #0077cc;
+    border: none;
+    color: #fff;
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    font-weight: bold;
     cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.2s;
   }
 
   #resetButton:hover {
-    background: #ddd;
+    background: #005fa3;
+  }
+
+  #resetButton:active {
+    transform: scale(0.98);
   }
 
   canvas {
     flex: 1;
     display: block;
     width: 100%;
-    border: 1px dashed #ccc;
+    border: 2px dashed #aaa;
     box-sizing: border-box;
+    margin-top: 1em;
   }
 
   @media (max-width: 600px) {
@@ -149,7 +183,7 @@
   <h1>Rifrazione</h1>
   <h2>Modalità canvas</h2>
   <nav>
-    <a href="camera.html" style="display: block; text-align: right;">Modalità foto</a>
+    <a href="camera.html">Modalità foto</a>
   </nav>
 </header>
 
@@ -176,7 +210,6 @@
 </div>
 
 <div class="color-controls">
-
   <div class="colore-disegnare">
     <label>Colore per Disegnare:</label>
     <input type="color" id="drawColorOther" value="#000000">
@@ -197,7 +230,6 @@
       <div id="similarity">N/A</div>
     </div>
   </div>
-
 </div>
 
 <button id="resetButton">Reset</button>
@@ -205,288 +237,288 @@
 <canvas id="canvas"></canvas>
 
 <script>
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth - 10;
-  canvas.height = window.innerHeight - document.querySelector('header').offsetHeight 
-                  - document.querySelector('.settings').offsetHeight 
-                  - document.querySelector('.color-controls').offsetHeight 
-                  - document.getElementById('resetButton').offsetHeight 
-                  - 30;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-var painting = false;
-var drawColor = "#000000";
-var confrontoColor = "#ff0000";
-
-const drawPreset = document.getElementById('drawColorPreset');
-const drawOther = document.getElementById('drawColorOther');
-const confrontoPreset = document.getElementById('confrontoColorPreset');
-const confrontoOther = document.getElementById('confrontoColorOther');
-
-drawOther.addEventListener('input', function(e) {
-  drawColor = e.target.value;
-  updateResults();
-});
-
-confrontoOther.addEventListener('input', function(e) {
-  confrontoColor = e.target.value;
-  updateResults();
-});
-
-document.getElementById('averageMethod').addEventListener('change', updateResults);
-document.getElementById('distanceMethod').addEventListener('change', updateResults);
-
-canvas.addEventListener('mousedown', startDraw);
-canvas.addEventListener('mouseup', endDraw);
-canvas.addEventListener('mousemove', draw);
-
-canvas.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    startDraw(e.touches[0]);
-}, false);
-canvas.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    endDraw();
-}, false);
-canvas.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    draw(e.touches[0]);
-}, false);
-
-document.getElementById('resetButton').addEventListener('click', resetCanvas);
-
-function startDraw(e) {
-  painting = true;
-  ctx.beginPath();
-  draw(e);
-}
-
-function endDraw() {
-  painting = false;
-  ctx.beginPath();
-  updateResults();
-}
-
-function draw(e) {
-  if(!painting) return;
-  ctx.lineWidth = 25;
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = drawColor;
-
-  var rect = canvas.getBoundingClientRect();
-  var x = e.clientX - rect.left;
-  var y = e.clientY - rect.top;
-
-  ctx.lineTo(x,y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x,y);
-}
-
-function resetCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  updateResults();
-}
-
-function updateResults() {
-  const avgMethod = document.getElementById('averageMethod').value;
-  const distMethod = document.getElementById('distanceMethod').value;
-  const avgColor = calculateAverageColor(avgMethod);
-
-  if(!avgColor) {
-    document.getElementById('averageColorBox').style.backgroundColor = '#ffffff';
-    document.getElementById('similarity').textContent = 'N/A';
-    return;
-  }
-
-  document.getElementById('averageColorBox').style.backgroundColor = `rgb(${avgColor.r},${avgColor.g},${avgColor.b})`;
-  const selectedColor = hexToRgb(confrontoColor);
-  const dist = calculateColorDistance(selectedColor, avgColor, distMethod);
-  const maxDistance = Math.sqrt(255*255*3); 
-  // const similarity = 100 * (1 - dist/maxDistance);
-  // document.getElementById('similarity').textContent = similarity.toFixed(2) + '%';
-  document.getElementById('similarity').textContent = dist.toFixed(2);
-}
-
-function getImageDataFromCanvas() {
-  const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
-  const totalPixels = imageData.data.length/4;
-  return {imageData, totalPixels};
-}
-
-function hexToRgb(hex) {
-  const stripped=hex.replace('#','');
-  const bigint=parseInt(stripped,16);
-  const r=(bigint>>16)&255;
-  const g=(bigint>>8)&255;
-  const b=bigint&255;
-  return {r,g,b};
-}
-
-function calculateAverageColor(method) {
-  const {imageData, totalPixels} = getImageDataFromCanvas();
-  const data = imageData.data;
-  if(method === 'rgb') return averageRGB(data, totalPixels);
-  if(method === 'hex') return averageHex(data, totalPixels);
-  if(method === 'lum') return averageLuminanceWeighted(data, totalPixels);
-  if(method === 'hsv') return averageHSV(data, totalPixels);
-  return null;
-}
-
-function averageRGB(data, totalPixels) {
-  let rSum=0,gSum=0,bSum=0,count=0;
-  for(let i=0;i<data.length;i+=4){
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
-      rSum+=data[i];gSum+=data[i+1];bSum+=data[i+2];count++;
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth - 10;
+      canvas.height = window.innerHeight - document.querySelector('header').offsetHeight 
+                      - document.querySelector('.settings').offsetHeight 
+                      - document.querySelector('.color-controls').offsetHeight 
+                      - document.getElementById('resetButton').offsetHeight 
+                      - 30;
     }
-  }
-  if(count===0)return null;
-  return {r:Math.round(rSum/count),g:Math.round(gSum/count),b:Math.round(bSum/count)};
-}
-
-function averageHex(data, totalPixels) {
-  let sum=0,count=0;
-  for(let i=0;i<data.length;i+=4){
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
-      const val=(data[i]<<16)+(data[i+1]<<8)+data[i+2];
-      sum+=val;count++;
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    var painting = false;
+    var drawColor = "#000000";
+    var confrontoColor = "#ff0000";
+    
+    const drawPreset = document.getElementById('drawColorPreset');
+    const drawOther = document.getElementById('drawColorOther');
+    const confrontoPreset = document.getElementById('confrontoColorPreset');
+    const confrontoOther = document.getElementById('confrontoColorOther');
+    
+    drawOther.addEventListener('input', function(e) {
+      drawColor = e.target.value;
+      updateResults();
+    });
+    
+    confrontoOther.addEventListener('input', function(e) {
+      confrontoColor = e.target.value;
+      updateResults();
+    });
+    
+    document.getElementById('averageMethod').addEventListener('change', updateResults);
+    document.getElementById('distanceMethod').addEventListener('change', updateResults);
+    
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mousemove', draw);
+    
+    canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        startDraw(e.touches[0]);
+    }, false);
+    canvas.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        endDraw();
+    }, false);
+    canvas.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        draw(e.touches[0]);
+    }, false);
+    
+    document.getElementById('resetButton').addEventListener('click', resetCanvas);
+    
+    function startDraw(e) {
+      painting = true;
+      ctx.beginPath();
+      draw(e);
     }
-  }
-  if(count===0)return null;
-  const avgVal=Math.round(sum/count);
-  return {r:(avgVal>>16)&255,g:(avgVal>>8)&255,b:avgVal&255};
-}
-
-function averageLuminanceWeighted(data, totalPixels){
-  let rSum=0,gSum=0,bSum=0,wSum=0;
-  for(let i=0;i<data.length;i+=4){
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
-      const R=data[i],G=data[i+1],B=data[i+2];
-      const L=0.299*R+0.587*G+0.114*B;
-      rSum+=R*L;gSum+=G*L;bSum+=B*L;wSum+=L;
+    
+    function endDraw() {
+      painting = false;
+      ctx.beginPath();
+      updateResults();
     }
-  }
-  if(wSum===0)return null;
-  return {r:Math.round(rSum/wSum),g:Math.round(gSum/wSum),b:Math.round(bSum/wSum)};
-}
-
-function averageHSV(data, totalPixels){
-  let hSum=0,sSum=0,vSum=0,count=0;
-  for(let i=0;i<data.length;i+=4){
-    if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
-      const R=data[i],G=data[i+1],B=data[i+2];
-      const {h,s,v}=rgbToHsv(R,G,B);
-      hSum+=h;sSum+=s;vSum+=v;count++;
+    
+    function draw(e) {
+      if(!painting) return;
+      ctx.lineWidth = 25;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = drawColor;
+    
+      var rect = canvas.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+    
+      ctx.lineTo(x,y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x,y);
     }
-  }
-  if(count===0)return null;
-  const hAvg=hSum/count,sAvg=sSum/count,vAvg=vSum/count;
-  return hsvToRgb(hAvg,sAvg,vAvg);
-}
-
-function calculateColorDistance(c1, c2, method) {
-  if(method === 'euclidean') {
-    return colorDistanceEuclidean(c1,c2);
-  } else if(method === 'lab') {
-    return colorDistanceLab(c1,c2);
-  } else if(method === 'avgchannels') {
-    return colorDistanceAvgChannels(c1,c2);
-  } else if(method === 'hue') {
-    return colorDistanceHue(c1,c2);
-  } else {
-    return colorDistanceEuclidean(c1,c2); 
-  }
-}
-
-function colorDistanceEuclidean(c1,c2){
-  return Math.sqrt((c1.r-c2.r)**2+(c1.g-c2.g)**2+(c1.b-c2.b)**2);
-}
-
-function colorDistanceAvgChannels(c1,c2){
-  return (Math.abs(c1.r-c2.r)+Math.abs(c1.g-c2.g)+Math.abs(c1.b-c2.b))/3;
-}
-
-function colorDistanceHue(c1,c2){
-  const hsv1=rgbToHsv(c1.r,c1.g,c1.b);
-  const hsv2=rgbToHsv(c2.r,c2.g,c2.b);
-  const dh=Math.abs(hsv1.h-hsv2.h);
-  return Math.min(dh,360-dh);
-}
-
-function colorDistanceLab(c1,c2){
-  const lab1=rgbToLab(c1.r,c1.g,c1.b);
-  const lab2=rgbToLab(c2.r,c2.g,c2.b);
-  return Math.sqrt((lab1.L-lab2.L)**2+(lab1.a-lab2.a)**2+(lab1.b-lab2.b)**2);
-}
-
-function rgbToHsv(r,g,b){
-  r/=255;g/=255;b/=255;
-  const max=Math.max(r,g,b),min=Math.min(r,g,b);
-  let h,s,v=max;const d=max-min;
-  s=max===0?0:d/max;
-  if(max===min){
-    h=0;
-  } else {
-    switch(max){
-      case r:h=(g-b)/d+(g<b?6:0);break;
-      case g:h=(b-r)/d+2;break;
-      case b:h=(r-g)/d+4;break;
+    
+    function resetCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      updateResults();
     }
-    h*=60;
-  }
-  return {h:h,s:s,v:v};
-}
-
-function hsvToRgb(h,s,v){
-  let r,g,b;
-  const c=v*s;
-  const x=c*(1-Math.abs((h/60)%2-1));
-  const m=v-c;
-  let r_,g_,b_;
-  if(h<60){r_=c;g_=x;b_=0;}
-  else if(h<120){r_=x;g_=c;b_=0;}
-  else if(h<180){r_=0;g_=c;b_=x;}
-  else if(h<240){r_=0;g_=x;b_=c;}
-  else if(h<300){r_=x;g_=0;b_=c;}
-  else {r_=c;g_=0;b_=x;}
-  r=(r_+m)*255;g=(g_+m)*255;b=(b_+m)*255;
-  return {r:Math.round(r),g:Math.round(g),b:Math.round(b)};
-}
-
-function rgbToLab(R,G,B){
-  let r=R/255;let g=G/255;let b=B/255;
-  r=(r>0.04045)?Math.pow((r+0.055)/1.055,2.4):r/12.92;
-  g=(g>0.04045)?Math.pow((g+0.055)/1.055,2.4):g/12.92;
-  b=(b>0.04045)?Math.pow((b+0.055)/1.055,2.4):b/12.92;
-
-  const X=r*0.4124+g*0.3576+b*0.1805;
-  const Y=r*0.2126+g*0.7152+b*0.0722;
-  const Z=r*0.0193+g*0.1192+b*0.9505;
-
-  let x=X/0.95047;
-  let y=Y/1.00000;
-  let z=Z/1.08883;
-
-  x=(x>0.008856)?Math.pow(x,1/3):(7.787*x)+(16/116);
-  y=(y>0.008856)?Math.pow(y,1/3):(7.787*y)+(16/116);
-  z=(z>0.008856)?Math.pow(z,1/3):(7.787*z)+(16/116);
-
-  const L=(116*y)-16;
-  const a=500*(x-y);
-  const b2=200*(y-z);
-  return {L,a,b:b2};
-}
-
-// Imposta i valori di default
-drawOther.value = "#000000";
-confrontoOther.value = "#ff0000";
-updateResults();
-
-</script>
+    
+    function updateResults() {
+      const avgMethod = document.getElementById('averageMethod').value;
+      const distMethod = document.getElementById('distanceMethod').value;
+      const avgColor = calculateAverageColor(avgMethod);
+    
+      if(!avgColor) {
+        document.getElementById('averageColorBox').style.backgroundColor = '#ffffff';
+        document.getElementById('similarity').textContent = 'N/A';
+        return;
+      }
+    
+      document.getElementById('averageColorBox').style.backgroundColor = `rgb(${avgColor.r},${avgColor.g},${avgColor.b})`;
+      const selectedColor = hexToRgb(confrontoColor);
+      const dist = calculateColorDistance(selectedColor, avgColor, distMethod);
+      const maxDistance = Math.sqrt(255*255*3); 
+      // const similarity = 100 * (1 - dist/maxDistance);
+      // document.getElementById('similarity').textContent = similarity.toFixed(2) + '%';
+      document.getElementById('similarity').textContent = dist.toFixed(2);
+    }
+    
+    function getImageDataFromCanvas() {
+      const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+      const totalPixels = imageData.data.length/4;
+      return {imageData, totalPixels};
+    }
+    
+    function hexToRgb(hex) {
+      const stripped=hex.replace('#','');
+      const bigint=parseInt(stripped,16);
+      const r=(bigint>>16)&255;
+      const g=(bigint>>8)&255;
+      const b=bigint&255;
+      return {r,g,b};
+    }
+    
+    function calculateAverageColor(method) {
+      const {imageData, totalPixels} = getImageDataFromCanvas();
+      const data = imageData.data;
+      if(method === 'rgb') return averageRGB(data, totalPixels);
+      if(method === 'hex') return averageHex(data, totalPixels);
+      if(method === 'lum') return averageLuminanceWeighted(data, totalPixels);
+      if(method === 'hsv') return averageHSV(data, totalPixels);
+      return null;
+    }
+    
+    function averageRGB(data, totalPixels) {
+      let rSum=0,gSum=0,bSum=0,count=0;
+      for(let i=0;i<data.length;i+=4){
+        if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+          rSum+=data[i];gSum+=data[i+1];bSum+=data[i+2];count++;
+        }
+      }
+      if(count===0)return null;
+      return {r:Math.round(rSum/count),g:Math.round(gSum/count),b:Math.round(bSum/count)};
+    }
+    
+    function averageHex(data, totalPixels) {
+      let sum=0,count=0;
+      for(let i=0;i<data.length;i+=4){
+        if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+          const val=(data[i]<<16)+(data[i+1]<<8)+data[i+2];
+          sum+=val;count++;
+        }
+      }
+      if(count===0)return null;
+      const avgVal=Math.round(sum/count);
+      return {r:(avgVal>>16)&255,g:(avgVal>>8)&255,b:avgVal&255};
+    }
+    
+    function averageLuminanceWeighted(data, totalPixels){
+      let rSum=0,gSum=0,bSum=0,wSum=0;
+      for(let i=0;i<data.length;i+=4){
+        if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+          const R=data[i],G=data[i+1],B=data[i+2];
+          const L=0.299*R+0.587*G+0.114*B;
+          rSum+=R*L;gSum+=G*L;bSum+=B*L;wSum+=L;
+        }
+      }
+      if(wSum===0)return null;
+      return {r:Math.round(rSum/wSum),g:Math.round(gSum/wSum),b:Math.round(bSum/wSum)};
+    }
+    
+    function averageHSV(data, totalPixels){
+      let hSum=0,sSum=0,vSum=0,count=0;
+      for(let i=0;i<data.length;i+=4){
+        if(!(data[i]===255 && data[i+1]===255 && data[i+2]===255)){
+          const R=data[i],G=data[i+1],B=data[i+2];
+          const {h,s,v}=rgbToHsv(R,G,B);
+          hSum+=h;sSum+=s;vSum+=v;count++;
+        }
+      }
+      if(count===0)return null;
+      const hAvg=hSum/count,sAvg=sSum/count,vAvg=vSum/count;
+      return hsvToRgb(hAvg,sAvg,vAvg);
+    }
+    
+    function calculateColorDistance(c1, c2, method) {
+      if(method === 'euclidean') {
+        return colorDistanceEuclidean(c1,c2);
+      } else if(method === 'lab') {
+        return colorDistanceLab(c1,c2);
+      } else if(method === 'avgchannels') {
+        return colorDistanceAvgChannels(c1,c2);
+      } else if(method === 'hue') {
+        return colorDistanceHue(c1,c2);
+      } else {
+        return colorDistanceEuclidean(c1,c2); 
+      }
+    }
+    
+    function colorDistanceEuclidean(c1,c2){
+      return Math.sqrt((c1.r-c2.r)**2+(c1.g-c2.g)**2+(c1.b-c2.b)**2);
+    }
+    
+    function colorDistanceAvgChannels(c1,c2){
+      return (Math.abs(c1.r-c2.r)+Math.abs(c1.g-c2.g)+Math.abs(c1.b-c2.b))/3;
+    }
+    
+    function colorDistanceHue(c1,c2){
+      const hsv1=rgbToHsv(c1.r,c1.g,c1.b);
+      const hsv2=rgbToHsv(c2.r,c2.g,c2.b);
+      const dh=Math.abs(hsv1.h-hsv2.h);
+      return Math.min(dh,360-dh);
+    }
+    
+    function colorDistanceLab(c1,c2){
+      const lab1=rgbToLab(c1.r,c1.g,c1.b);
+      const lab2=rgbToLab(c2.r,c2.g,c2.b);
+      return Math.sqrt((lab1.L-lab2.L)**2+(lab1.a-lab2.a)**2+(lab1.b-lab2.b)**2);
+    }
+    
+    function rgbToHsv(r,g,b){
+      r/=255;g/=255;b/=255;
+      const max=Math.max(r,g,b),min=Math.min(r,g,b);
+      let h,s,v=max;const d=max-min;
+      s=max===0?0:d/max;
+      if(max===min){
+        h=0;
+      } else {
+        switch(max){
+          case r:h=(g-b)/d+(g<b?6:0);break;
+          case g:h=(b-r)/d+2;break;
+          case b:h=(r-g)/d+4;break;
+        }
+        h*=60;
+      }
+      return {h:h,s:s,v:v};
+    }
+    
+    function hsvToRgb(h,s,v){
+      let r,g,b;
+      const c=v*s;
+      const x=c*(1-Math.abs((h/60)%2-1));
+      const m=v-c;
+      let r_,g_,b_;
+      if(h<60){r_=c;g_=x;b_=0;}
+      else if(h<120){r_=x;g_=c;b_=0;}
+      else if(h<180){r_=0;g_=c;b_=x;}
+      else if(h<240){r_=0;g_=x;b_=c;}
+      else if(h<300){r_=x;g_=0;b_=c;}
+      else {r_=c;g_=0;b_=x;}
+      r=(r_+m)*255;g=(g_+m)*255;b=(b_+m)*255;
+      return {r:Math.round(r),g:Math.round(g),b:Math.round(b)};
+    }
+    
+    function rgbToLab(R,G,B){
+      let r=R/255;let g=G/255;let b=B/255;
+      r=(r>0.04045)?Math.pow((r+0.055)/1.055,2.4):r/12.92;
+      g=(g>0.04045)?Math.pow((g+0.055)/1.055,2.4):g/12.92;
+      b=(b>0.04045)?Math.pow((b+0.055)/1.055,2.4):b/12.92;
+    
+      const X=r*0.4124+g*0.3576+b*0.1805;
+      const Y=r*0.2126+g*0.7152+b*0.0722;
+      const Z=r*0.0193+g*0.1192+b*0.9505;
+    
+      let x=X/0.95047;
+      let y=Y/1.00000;
+      let z=Z/1.08883;
+    
+      x=(x>0.008856)?Math.pow(x,1/3):(7.787*x)+(16/116);
+      y=(y>0.008856)?Math.pow(y,1/3):(7.787*y)+(16/116);
+      z=(z>0.008856)?Math.pow(z,1/3):(7.787*z)+(16/116);
+    
+      const L=(116*y)-16;
+      const a=500*(x-y);
+      const b2=200*(y-z);
+      return {L,a,b:b2};
+    }
+    
+    // Imposta i valori di default
+    drawOther.value = "#000000";
+    confrontoOther.value = "#ff0000";
+    updateResults();
+    
+    </script>
 </body>
 </html>
