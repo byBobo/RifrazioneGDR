@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker</title>
+</head>
+<body>
+    <!-- Button that triggers the color picker -->
+    <button id="openColorPicker">Pick a Color</button>
+
+    <!-- Hidden color input -->
+    <input type="color" id="colorPicker" style="display: none;">
+
+    <script>
+        const button = document.getElementById('openColorPicker');
+        const colorPicker = document.getElementById('colorPicker');
+
+        // Open the color picker when the button is clicked
+        button.addEventListener('click', () => {
+            colorPicker.click();
+        });
+
+        // Listen for color changes
+        colorPicker.addEventListener('input', (event) => {
+            const selectedColor = event.target.value;
+            console.log(`Selected color: ${selectedColor}`);
+        });
+    </script>
+</body>
+</html>
