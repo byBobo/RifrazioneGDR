@@ -1,0 +1,47 @@
+.canvas-container {
+    position: relative;
+    margin: 20px auto;
+}
+
+#drawingCanvas {
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: crosshair;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.color-picker {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.brush-size {
+    width: 100px;
+    margin: 10px;
+}
+
+.clear-button {
+    background-color: #dc3545;
+}
+
+.clear-button:hover {
+    background-color: #c82333;
+}
+
+.save-button {
+    background-color: #28a745;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
