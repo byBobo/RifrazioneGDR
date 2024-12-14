@@ -373,26 +373,6 @@
       cameraModal.style.display = 'none';
     }
     
-    // function updateResults() {
-    //   if(!photoPreview.src) return;
-    //   const avgColor = calculateAverageColor(photoPreview, averageMethodSelect.value);
-    //   if(!avgColor) {
-    //     results.innerHTML = "<p>Nessuna immagine disponibile per il calcolo.</p>";
-    //     return;
-    //   }
-    //   const selectedColor = hexToRgb(confrontoColor);
-    //   const dist = calculateColorDistance(selectedColor, avgColor, distanceMethodSelect.value);
-    
-    //   results.innerHTML = `
-    //     <p><strong>Colore di Confronto:</strong> <span style="display:inline-block;width:20px;height:20px;background:${confrontoColor};"></span> ${confrontoColor}</p>
-    //     <p><strong>Colore Medio (${averageMethodSelect.value}):</strong> 
-    //       <span style="display:inline-block;width:20px;height:20px;background:rgb(${avgColor.r},${avgColor.g},${avgColor.b});"></span> 
-    //       rgb(${avgColor.r},${avgColor.g},${avgColor.b})
-    //     </p>
-    //     <p><strong>Distanza (${distanceMethodSelect.value}):</strong> ${dist.toFixed(2)}</p>
-    //   `;
-    // }
-    
     function getImageDataFromElement(imgElement) {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
