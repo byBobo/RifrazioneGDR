@@ -2,126 +2,98 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rifrazione - Modalità Foto</title>
     <link rel="stylesheet" href="../assets/styles/common.css">
     <link rel="stylesheet" href="../assets/styles/camera.css">
-    <title>Rifrazione - Foto</title>
-    <style>
-      /* Additional styling for the navigation bar, applied inline for demonstration */
-      nav {
-        margin-top: 1em;
-      }
-
-      nav ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 1em;
-        justify-content: center;
-        background: #eee;
-        border-radius: 6px;
-        padding: 0.5em 1em;
-      }
-
-      nav li {
-        display: inline;
-      }
-
-      nav a {
-        text-decoration: none;
-        color: #0077cc;
-        font-size: 0.9em;
-        font-weight: bold;
-        transition: color 0.3s;
-        padding: 0.3em 0.6em;
-        border-radius: 4px;
-      }
-
-      nav a:hover {
-        color: #005fa3;
-        background: #ddd;
-      }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
-      <h1>Rifrazione</h1>
-      <h2>Modalità foto</h2>
-      <nav>
-        <ul>
-          <li><a href="../../index.html">Home</a></li>
-          <li><a href="camera.html">Modalità Foto</a></li>
-          <li><a href="canvas.html">Modalità Canvas</a></li>
-        </ul>
-      </nav>
+        <h1>Rifrazione</h1>
+        <h2>Modalità Foto</h2>
+        <nav>
+            <ul>
+                <li><a href="../../index.html" aria-label="Vai alla pagina Home">Home</a></li>
+                <li><a href="camera.html" aria-label="Rimani su Modalità Foto">Modalità Foto</a></li>
+                <li><a href="canvas.html" aria-label="Vai alla Modalità Canvas">Modalità Canvas</a></li>
+            </ul>
+        </nav>
     </header>
     
-    <div class="settings">
-      <div>
-        <label for="averageMethod">Metodo Calcolo Media:</label>
-        <select id="averageMethod">
-          <option value="rgb">RGB</option>
-          <option value="hex">Esadecimali</option>
-          <option value="lum">Pesata Luminosità</option>
-          <option value="hsv">HSV</option>
-        </select>
-      </div>
-      <div>
-        <label for="distanceMethod">Metodo Calcolo Distanza:</label>
-        <select id="distanceMethod">
-          <option value="euclidean">Euclidea RGB</option>
-          <option value="lab">Delta E (Lab)</option>
-          <option value="avgchannels">Media Canali</option>
-          <option value="hue">Differenza Hue (HSV)</option>
-        </select>
-      </div>
-    </div>
-    
-    <div class="color-controls">
-      <div class="colore-confronto">
-        <label>Colore di Confronto:</label>
-        <input type="color" id="confrontoColorOther" value="#ff0000">
-      </div>
-    
-      <div class="camera-controls">
-        <label>Controlli Camera:</label>
-        <div class="camera-btns">
-          <button class="camera-icon" id="openCameraModalBtn" title="Apri Webcam">📷</button>
-          <button id="uploadPhotoBtn">Carica Foto</button>
-          <input type="file" accept="image/*;capture=camera" id="fileInput" style="display:none;" />
-        </div>
-      </div>
-    </div>
-    
-    <div class="photo-preview-section">
-      <label>Anteprima Foto:</label>
-      <img id="photoPreview" alt="Anteprima foto" />
-    </div>
-    
-    <div class="results" id="results">
-      <p id="noImageText" style="display:none;">Nessuna immagine disponibile per il calcolo.</p>
-      <p><strong>Colore di Confronto:</strong>
-         <span id="confrontoColorBox" style="display:inline-block;width:20px;height:20px;"></span>
-         <span id="confrontoColorText"></span>
-      </p>
-      <p><strong>Colore Medio (<span id="averageMethodText"></span>):</strong> 
-         <span id="averageColorBox" style="display:inline-block;width:20px;height:20px;"></span>
-         <span id="averageColorText"></span>
-      </p>
-      <p><strong>Distanza (<span id="distanceMethodText"></span>):</strong> 
-         <span id="distanceText"></span>
-      </p>
-    </div>
+    <main>
+        <section class="settings">
+            <h3>Preferenze</h3>
+            <div>
+                <label for="averageMethod">Metodo Calcolo Media:</label>
+                <select id="averageMethod" aria-label="Seleziona il metodo per calcolare la media">
+                    <option value="rgb">RGB</option>
+                    <option value="hex">Esadecimali</option>
+                    <option value="lum">Pesata Luminosità</option>
+                    <option value="hsv">HSV</option>
+                </select>
+            </div>
+            <div>
+                <label for="distanceMethod">Metodo Calcolo Distanza:</label>
+                <select id="distanceMethod" aria-label="Seleziona il metodo per calcolare la distanza">
+                    <option value="euclidean">Euclidea RGB</option>
+                    <option value="lab">Delta E (Lab)</option>
+                    <option value="avgchannels">Media Canali</option>
+                    <option value="hue">Differenza Hue (HSV)</option>
+                </select>
+            </div>
+        </section>
+        
+        <section class="color-controls">
+            <h3>Confronto</h3>
+            <div class="camera-controls">
+                <label>Scelta immagine</label>
+                <div class="camera-btns">
+                    <button id="openCameraModalBtn" title="Apri Webcam"><i class="fa-solid fa-camera-retro"></i></button>
+                    <button id="uploadPhotoBtn" title="Carica una foto"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+                    <input type="file" accept="image/*;capture=camera" id="fileInput" style="display:none;" aria-hidden="true">
+                </div>
+            </div>
+            <div class="colore-confronto">
+                <label>Colore di Confronto</label>
+                <input type="color" id="confrontoColorOther" value="#ff0000" aria-label="Seleziona il colore di confronto">
+            </div>
+  
+        </section>
+        
+        <section class="photo-preview-section">
+            <h3>Anteprima Foto</h3>
+            <img id="photoPreview" alt="Anteprima della foto caricata o scattata" aria-hidden="true" />
+        </section>
+        
+        <section class="results" id="results">
+            <h3>Risultati</h3>
+            <p id="noImageText" style="display:none;">Nessuna immagine disponibile per il calcolo.</p>
+            <p>
+                <strong>Colore di Confronto:</strong>
+                <span id="confrontoColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+                <span id="confrontoColorText"></span>
+            </p>
+            <p>
+                <strong>Colore Medio (<span id="averageMethodText"></span>):</strong>
+                <span id="averageColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+                <span id="averageColorText"></span>
+            </p>
+            <p>
+                <strong>Distanza (<span id="distanceMethodText"></span>):</strong>
+                <span id="distanceText"></span>
+            </p>
+        </section>
+    </main>
     
     <div class="modal" id="cameraModal">
-      <div class="modal-content">
-        <video id="video" autoplay playsinline></video>
-        <div class="modal-buttons">
-          <button id="captureBtn">Scatta Foto</button>
-          <button id="closeModalBtn">Chiudi</button>
+        <div class="modal-content">
+            <video id="video" autoplay playsinline aria-label="Video della webcam"></video>
+            <div class="modal-buttons">
+                <button id="captureBtn" aria-label="Scatta una foto dalla webcam">Scatta Foto</button>
+                <button id="closeModalBtn" aria-label="Chiudi la webcam">Chiudi</button>
+            </div>
         </div>
-      </div>
     </div>
 
     <script src="../js/utils/colorCalculations.js"></script>
