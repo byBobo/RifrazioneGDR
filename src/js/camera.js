@@ -1,4 +1,4 @@
-import { func1Name, func2Name } from './utils/colorCalculations.js';
+// import { func1Name, func2Name } from './utils/colorCalculations.js';
 
 let confrontoColor = "#ff0000";
 let stream = null;
