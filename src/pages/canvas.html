@@ -6,13 +6,54 @@
     <link rel="stylesheet" href="../assets/styles/common.css">
     <link rel="stylesheet" href="../assets/styles/canvas.css">
     <title>Rifrazione - Canvas</title>
+    <style>
+      /* Additional styling for the navigation bar, applied inline for demonstration */
+      nav {
+        margin-top: 1em;
+      }
+
+      nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        background: #eee;
+        border-radius: 6px;
+        padding: 0.5em 1em;
+      }
+
+      nav li {
+        display: inline;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #0077cc;
+        font-size: 0.9em;
+        font-weight: bold;
+        transition: color 0.3s;
+        padding: 0.3em 0.6em;
+        border-radius: 4px;
+      }
+
+      nav a:hover {
+        color: #005fa3;
+        background: #ddd;
+      }
+    </style>
 </head>
 <body>
     <header>
       <h1>Rifrazione</h1>
       <h2>Modalità canvas</h2>
       <nav>
-        <a href="camera.html">Modalità foto</a>
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="camera.html">Modalità Foto</a></li>
+          <li><a href="canvas.html">Modalità Canvas</a></li>
+        </ul>
       </nav>
     </header>
     <div class="settings">
@@ -81,10 +122,9 @@
       </p>
     </div>
     
-    <!-- Hidden image to emulate camera logic -->
     <img id="canvasImage" style="display:none;" />
     
-    <script src="../js/canvas.js"></script>
     <script src="../js/utils/colorCalculations.js"></script>
+    <script src="../js/canvas.js"></script>
 </body>
 </html>
