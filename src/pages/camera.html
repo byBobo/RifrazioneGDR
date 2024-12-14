@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rifrazione - Foto</title>
+</html>
+<body>
+    <header>
+      <h1>Rifrazione</h1>
+      <h2>Modalità foto</h2>
+      <nav>
+        <a href="canvas.html">Modalità canvas</a>
+      </nav>
+    </header>
+    
+    <div class="settings">
+      <div>
+        <label for="averageMethod">Metodo Calcolo Media:</label>
+        <select id="averageMethod">
+          <option value="rgb">RGB</option>
+          <option value="hex">Esadecimali</option>
+          <option value="lum">Pesata Luminosità</option>
+          <option value="hsv">HSV</option>
+        </select>
+      </div>
+    
+      <div>
+        <label for="distanceMethod">Metodo Calcolo Distanza:</label>
+        <select id="distanceMethod">
+          <option value="euclidean">Euclidea RGB</option>
+          <option value="lab">Delta E (Lab)</option>
+          <option value="avgchannels">Media Canali</option>
+          <option value="hue">Differenza Hue (HSV)</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="color-controls">
+      <div class="colore-confronto">
+        <label>Colore di Confronto:</label>
+        <input type="color" id="confrontoColorOther" value="#ff0000">
+      </div>
+    
+      <div class="camera-controls">
+        <label>Controlli Camera:</label>
+        <div class="camera-btns">
+          <button class="camera-icon" id="openCameraModalBtn" title="Apri Webcam">📷</button>
+          <button id="uploadPhotoBtn">Carica Foto</button>
+          <input type="file" accept="image/*;capture=camera" id="fileInput" style="display:none;" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="photo-preview-section">
+      <label>Anteprima Foto:</label>
+      <img id="photoPreview" alt="Anteprima foto" />
+    </div>
+    
+    <div class="results" id="results"></div>
+    
+    <!-- Modale Webcam -->
+    <div class="modal" id="cameraModal">
+      <div class="modal-content">
+        <video id="video" autoplay playsinline></video>
+        <div class="modal-buttons">
+          <button id="captureBtn">Scatta Foto</button>
+          <button id="closeModalBtn">Chiudi</button>
+        </div>
+      </div>
+    </div>
+</body>
+<script type="module" src="../js/camera.js"></script>
+</html>

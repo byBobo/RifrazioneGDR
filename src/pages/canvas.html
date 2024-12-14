@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rifrazione - Canvas</title>
+</html>
+<body>
+    <header>
+      <h1>Rifrazione</h1>
+      <h2>Modalità canvas</h2>
+      <nav>
+        <a href="camera.html">Modalità foto</a>
+      </nav>
+    </header>
+    <div class="settings">
+      <div>
+        <label for="averageMethod">Metodo Calcolo Media:</label>
+        <select id="averageMethod">
+          <option value="rgb">RGB</option>
+          <option value="hex">Esadecimali</option>
+          <option value="lum">Pesata Luminosità</option>
+          <option value="hsv">HSV</option>
+        </select>
+      </div>
+      <div>
+        <label for="distanceMethod">Metodo Calcolo Distanza:</label>
+        <select id="distanceMethod">
+          <option value="euclidean">Euclidea RGB</option>
+          <option value="lab">Delta E (Lab)</option>
+          <option value="avgchannels">Media Canali</option>
+          <option value="hue">Differenza Hue (HSV)</option>
+        </select>
+      </div>
+    </div>
+    <div class="color-controls">
+      <div class="colore-disegnare">
+        <label>Colore per Disegnare:</label>
+        <input type="color" id="drawColor" value="#000000">
+      </div>
+      <div class="colore-confronto">
+        <label>Colore di Confronto:</label>
+        <input type="color" id="confrontoColor" value="#ff0000">
+      </div>
+      <div>
+        <label>Colore Medio:</label>
+        <div id="averageColorBox" style="width: 50px; height: 20px; border: 1px solid #000;"></div>
+      </div>
+    </div>
+    
+    <button class="open-canvas-btn">Apri Canvas</button>
+    
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal" id="canvasModal">
+      <div class="modal-header">
+        <h3>Canvas</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <canvas id="canvas"></canvas>
+      <button id="resetButton">Reset</button>
+    </div>
+    
+    <div class="results" id="results">
+      <p><strong>Colore per Disegnare:</strong>
+      <p><strong>Colore di Confronto:</strong>
+      <p><strong>Colore Medio:</strong>
+      <p><strong>Distanza:</strong>
+    </div>
+</body>
+<script type="module" src="../js/canvas.js"></script>
+</html>
