@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../assets/styles/common.css">
     <link rel="stylesheet" href="../assets/styles/camera.css">
     <title>Rifrazione - Foto</title>
-</html>
+</head>
 <body>
     <header>
       <h1>Rifrazione</h1>
@@ -26,7 +26,6 @@
           <option value="hsv">HSV</option>
         </select>
       </div>
-    
       <div>
         <label for="distanceMethod">Metodo Calcolo Distanza:</label>
         <select id="distanceMethod">
@@ -59,7 +58,20 @@
       <img id="photoPreview" alt="Anteprima foto" />
     </div>
     
-    <div class="results" id="results"></div>
+    <div class="results" id="results">
+      <p id="noImageText" style="display:none;">Nessuna immagine disponibile per il calcolo.</p>
+      <p><strong>Colore di Confronto:</strong>
+         <span id="confrontoColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+         <span id="confrontoColorText"></span>
+      </p>
+      <p><strong>Colore Medio (<span id="averageMethodText"></span>):</strong> 
+         <span id="averageColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+         <span id="averageColorText"></span>
+      </p>
+      <p><strong>Distanza (<span id="distanceMethodText"></span>):</strong> 
+         <span id="distanceText"></span>
+      </p>
+    </div>
     
     <!-- Modale Webcam -->
     <div class="modal" id="cameraModal">
@@ -71,6 +83,8 @@
         </div>
       </div>
     </div>
+
+    <script src="../js/camera.js"></script>
+    <script src="../js/utils/colorCalculations.js"></script>
 </body>
-<script src="../js/camera.js"></script>
 </html>

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../assets/styles/common.css">
     <link rel="stylesheet" href="../assets/styles/canvas.css">
     <title>Rifrazione - Canvas</title>
-</html>
+</head>
 <body>
     <header>
       <h1>Rifrazione</h1>
@@ -44,10 +44,6 @@
         <label>Colore di Confronto:</label>
         <input type="color" id="confrontoColor" value="#ff0000">
       </div>
-      <div>
-        <label>Colore Medio:</label>
-        <div id="averageColorBox" style="width: 50px; height: 20px; border: 1px solid #000;"></div>
-      </div>
     </div>
     
     <button class="open-canvas-btn">Apri Canvas</button>
@@ -63,11 +59,32 @@
     </div>
     
     <div class="results" id="results">
+      <p id="noImageText" style="display:none;">Nessuna immagine disponibile per il calcolo.</p>
+      
       <p><strong>Colore per Disegnare:</strong>
+         <span id="drawColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+         <span id="drawColorText"></span>
+      </p>
+      
       <p><strong>Colore di Confronto:</strong>
-      <p><strong>Colore Medio:</strong>
-      <p><strong>Distanza:</strong>
+         <span id="confrontoColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+         <span id="confrontoColorText"></span>
+      </p>
+      
+      <p><strong>Colore Medio (<span id="averageMethodText"></span>):</strong> 
+         <span id="averageColorBox" style="display:inline-block;width:20px;height:20px;"></span>
+         <span id="averageColorText"></span>
+      </p>
+      
+      <p><strong>Distanza (<span id="distanceMethodText"></span>):</strong> 
+         <span id="distanceText"></span>
+      </p>
     </div>
+    
+    <!-- Hidden image to emulate camera logic -->
+    <img id="canvasImage" style="display:none;" />
+    
+    <script src="../js/canvas.js"></script>
+    <script src="../js/utils/colorCalculations.js"></script>
 </body>
-<script src="../js/canvas.js"></script>
 </html>
