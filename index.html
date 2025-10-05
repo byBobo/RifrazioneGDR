@@ -3,34 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Picker - Home</title>
-    <link rel="stylesheet" href="src/assets/styles/common.css">
+    <title>Analizzatore Cromatico</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <header>
-        <h1>Rifrazione</h1>
-        <h2>Home</h2>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="src/pages/camera.html">Modalità Foto</a></li>
-                <li><a href="src/pages/canvas.html">Modalità Canvas</a></li>
-            </ul>
-        </nav>
+        <h1>Analizzatore Cromatico</h1>
     </header>
-    
-    <div class="container">
-        <div class="features">
-            <div class="feature-card">
-                <h2>Immagine</h2>
-                <a href="src/pages/camera.html">Apri Camera</a>
+
+    <main>
+        <div class="spazi-container">
+            <!-- Spazio di Lavoro 1 -->
+            <div class="spazio" id="spazio1">
+                <h2>Spazio 1</h2>
+                <div class="controls">
+                    <label><input type="radio" name="source1" value="file" checked> File</label>
+                    <label><input type="radio" name="source1" value="url"> URL</label>
+                    <label><input type="radio" name="source1" value="canvas"> Canvas</label>
+                    <label><input type="radio" name="source1" value="color"> Colore</label>
+                </div>
+                
+                <div class="input-area">
+                    <div class="input-wrapper" data-source="file" data-space="1">
+                        <input type="file" accept="image/*">
+                    </div>
+                    <div class="input-wrapper" data-source="url" data-space="1" style="display: none;">
+                        <input type="url" placeholder="https://example.com/image.png">
+                        <button>Carica</button>
+                    </div>
+                    <div class="input-wrapper" data-source="canvas" data-space="1" style="display: none;">
+                        <button class="canvas-open-btn">Apri Canvas</button>
+                    </div>
+                    <div class="input-wrapper" data-source="color" data-space="1" style="display: none;">
+                        <div class="color-palette">
+                            <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
+                            <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
+                            <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
+                            <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
+                            <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
+                            <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
+                            <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
+                            <label class="custom-color-btn">
+                                Personalizzato
+                                <input type="color" value="#ffffff" class="color-picker-input">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-container">
+                    <div class="placeholder">Nessuna sorgente selezionata</div>
+                    <img src="" alt="Anteprima Spazio 1" class="preview-image" style="display:none;">
+                    <div class="preview-color" style="display:none;"></div>
+                </div>
+
+                <div class="results">
+                    <table class="results-table">
+                        <tbody>
+                            <tr class="avg-row">
+                                <th>Colore Medio</th>
+                                <td><div class="result-box"></div></td>
+                                <td class="result-hex">-</td>
+                                <td class="result-rgb">-</td>
+                            </tr>
+                            <tr class="mode-row">
+                                <th>Colore Moda</th>
+                                <td><div class="result-box"></div></td>
+                                <td class="result-hex">-</td>
+                                <td class="result-rgb">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="feature-card">
-                <h2>Disegno</h2>
-                <a href="src/pages/canvas.html">Apri Canvas</a>
+            <!-- Spazio di Lavoro 2 -->
+            <div class="spazio" id="spazio2">
+                <h2>Spazio 2</h2>
+                <div class="controls">
+                    <label><input type="radio" name="source2" value="file" checked> File</label>
+                    <label><input type="radio" name="source2" value="url"> URL</label>
+                    <label><input type="radio" name="source2" value="canvas"> Canvas</label>
+                    <label><input type="radio" name="source2" value="color"> Colore</label>
+                </div>
+                
+                <div class="input-area">
+                    <div class="input-wrapper" data-source="file" data-space="2">
+                        <input type="file" accept="image/*">
+                    </div>
+                    <div class="input-wrapper" data-source="url" data-space="2" style="display: none;">
+                        <input type="url" placeholder="https://example.com/image.png">
+                        <button>Carica</button>
+                    </div>
+                    <div class="input-wrapper" data-source="canvas" data-space="2" style="display: none;">
+                         <button class="canvas-open-btn">Apri Canvas</button>
+                    </div>
+                    <div class="input-wrapper" data-source="color" data-space="2" style="display: none;">
+                        <div class="color-palette">
+                             <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
+                             <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
+                             <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
+                             <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
+                             <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
+                             <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
+                             <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
+                             <label class="custom-color-btn">
+                                 Personalizzato
+                                 <input type="color" value="#ffffff" class="color-picker-input">
+                             </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-container">
+                    <div class="placeholder">Nessuna sorgente selezionata</div>
+                    <img src="" alt="Anteprima Spazio 2" class="preview-image" style="display:none;">
+                    <div class="preview-color" style="display:none;"></div>
+                </div>
+
+                <div class="results">
+                     <table class="results-table">
+                        <tbody>
+                            <tr class="avg-row">
+                                <th>Colore Medio</th>
+                                <td><div class="result-box"></div></td>
+                                <td class="result-hex">-</td>
+                                <td class="result-rgb">-</td>
+                            </tr>
+                            <tr class="mode-row">
+                                <th>Colore Moda</th>
+                                <td><div class="result-box"></div></td>
+                                <td class="result-hex">-</td>
+                                <td class="result-rgb">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="confronto-container">
+            <h3>Confronto tra medie</h3>
+            <p><strong>Distanza Euclidea:</strong> <span id="dist-value">-</span></p>
+            <p><strong>Percentuale Distanza:</strong> <span id="dist-perc">-</span></p>
+        </div>
+    </main>
+
+    <!-- Modal per il Canvas -->
+    <div id="canvas-modal-overlay" style="display: none;">
+        <div id="canvas-modal-content">
+            <div class="modal-header">
+                <h3>Disegna sul Canvas</h3>
+                <button id="canvas-close-btn">&times;</button>
+            </div>
+            <div class="canvas-controls">
+                <label>Colore: <input type="color" id="canvas-color" value="#000000"></label>
+                <label>Spessore: <input type="range" id="canvas-brush-size" min="1" max="50" value="5"></label>
+            </div>
+            <canvas id="canvas"></canvas>
+            <div class="modal-footer">
+                <button id="canvas-clear-btn">Pulisci</button>
+                <button id="canvas-save-btn">Salva e Chiudi</button>
             </div>
         </div>
     </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
