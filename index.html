@@ -37,16 +37,24 @@
                     </div>
                     <div class="input-wrapper" data-source="color" data-space="1" style="display: none;">
                         <div class="color-palette">
+                            <!-- Riga 1 -->
                             <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
                             <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
                             <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
+                            <div class="palette-swatch" data-color="#84cc16" title="Lime"></div>
                             <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
+                            <div class="palette-swatch" data-color="#14b8a6" title="Ciano"></div>
+                            <!-- Riga 2 -->
                             <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
+                            <div class="palette-swatch" data-color="#6366f1" title="Indaco"></div>
                             <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
+                            <div class="palette-swatch" data-color="#d946ef" title="Fucsia"></div>
                             <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
+                            <div class="palette-swatch" data-color="#78716c" title="Grigio"></div>
+
                             <label class="custom-color-btn">
                                 Personalizzato
-                                <input type="color" value="#ffffff" class="color-picker-input">
+                                <input type="color" value="#ef4444" class="color-picker-input">
                             </label>
                         </div>
                     </div>
@@ -62,16 +70,16 @@
                     <table class="results-table">
                         <tbody>
                             <tr class="avg-row">
-                                <th>Colore Medio</th>
-                                <td><div class="result-box"></div></td>
-                                <td class="result-hex">-</td>
-                                <td class="result-rgb">-</td>
+                                <th scope="row">Colore Medio</th>
+                                <td data-label="Box" class="result-box-cell"><div class="result-box"></div></td>
+                                <td data-label="HEX" class="result-hex">-</td>
+                                <td data-label="RGB" class="result-rgb">-</td>
                             </tr>
                             <tr class="mode-row">
-                                <th>Colore Moda</th>
-                                <td><div class="result-box"></div></td>
-                                <td class="result-hex">-</td>
-                                <td class="result-rgb">-</td>
+                                <th scope="row">Colore Moda</th>
+                                <td data-label="Box" class="result-box-cell"><div class="result-box"></div></td>
+                                <td data-label="HEX" class="result-hex">-</td>
+                                <td data-label="RGB" class="result-rgb">-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -81,7 +89,7 @@
             <!-- Spazio di Lavoro 2 -->
             <div class="spazio" id="spazio2">
                 <h2>Spazio 2</h2>
-                <div class="controls">
+                 <div class="controls">
                     <label><input type="radio" name="source2" value="file" checked> File</label>
                     <label><input type="radio" name="source2" value="url"> URL</label>
                     <label><input type="radio" name="source2" value="canvas"> Canvas</label>
@@ -101,17 +109,25 @@
                     </div>
                     <div class="input-wrapper" data-source="color" data-space="2" style="display: none;">
                         <div class="color-palette">
-                             <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
-                             <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
-                             <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
-                             <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
-                             <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
-                             <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
-                             <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
-                             <label class="custom-color-btn">
-                                 Personalizzato
-                                 <input type="color" value="#ffffff" class="color-picker-input">
-                             </label>
+                            <!-- Riga 1 -->
+                            <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
+                            <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
+                            <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
+                            <div class="palette-swatch" data-color="#84cc16" title="Lime"></div>
+                            <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
+                            <div class="palette-swatch" data-color="#14b8a6" title="Ciano"></div>
+                            <!-- Riga 2 -->
+                            <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
+                            <div class="palette-swatch" data-color="#6366f1" title="Indaco"></div>
+                            <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
+                            <div class="palette-swatch" data-color="#d946ef" title="Fucsia"></div>
+                            <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
+                            <div class="palette-swatch" data-color="#78716c" title="Grigio"></div>
+                            
+                            <label class="custom-color-btn">
+                                Personalizzato
+                                <input type="color" value="#ef4444" class="color-picker-input">
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -126,16 +142,16 @@
                      <table class="results-table">
                         <tbody>
                             <tr class="avg-row">
-                                <th>Colore Medio</th>
-                                <td><div class="result-box"></div></td>
-                                <td class="result-hex">-</td>
-                                <td class="result-rgb">-</td>
+                                <th scope="row">Colore Medio</th>
+                                <td data-label="Box" class="result-box-cell"><div class="result-box"></div></td>
+                                <td data-label="HEX" class="result-hex">-</td>
+                                <td data-label="RGB" class="result-rgb">-</td>
                             </tr>
                             <tr class="mode-row">
-                                <th>Colore Moda</th>
-                                <td><div class="result-box"></div></td>
-                                <td class="result-hex">-</td>
-                                <td class="result-rgb">-</td>
+                                <th scope="row">Colore Moda</th>
+                                <td data-label="Box" class="result-box-cell"><div class="result-box"></div></td>
+                                <td data-label="HEX" class="result-hex">-</td>
+                                <td data-label="RGB" class="result-rgb">-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -145,8 +161,18 @@
 
         <div class="confronto-container">
             <h3>Confronto tra medie</h3>
-            <p><strong>Distanza Euclidea:</strong> <span id="dist-value">-</span></p>
-            <p><strong>Percentuale Distanza:</strong> <span id="dist-perc">-</span></p>
+            <table class="results-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Distanza Euclidea</th>
+                        <td data-label="Valore" id="dist-value">-</td>
+                    </tr>
+                     <tr>
+                        <th scope="row">Percentuale Distanza</th>
+                        <td data-label="%" id="dist-perc">-</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </main>
 
@@ -158,8 +184,30 @@
                 <button id="canvas-close-btn">&times;</button>
             </div>
             <div class="canvas-controls">
-                <label>Colore: <input type="color" id="canvas-color" value="#000000"></label>
-                <label>Spessore: <input type="range" id="canvas-brush-size" min="1" max="50" value="5"></label>
+                <div class="canvas-palette-container">
+                    <label>Colore:</label>
+                    <div class="color-palette" id="canvas-color-palette">
+                        <div class="palette-swatch" data-color="#ef4444" title="Rosso"></div>
+                        <div class="palette-swatch" data-color="#f97316" title="Arancione"></div>
+                        <div class="palette-swatch" data-color="#eab308" title="Giallo"></div>
+                        <div class="palette-swatch" data-color="#84cc16" title="Lime"></div>
+                        <div class="palette-swatch" data-color="#22c55e" title="Verde"></div>
+                        <div class="palette-swatch" data-color="#14b8a6" title="Ciano"></div>
+                        <div class="palette-swatch" data-color="#3b82f6" title="Blu"></div>
+                        <div class="palette-swatch" data-color="#6366f1" title="Indaco"></div>
+                        <div class="palette-swatch" data-color="#8b5cf6" title="Viola"></div>
+                        <div class="palette-swatch" data-color="#d946ef" title="Fucsia"></div>
+                        <div class="palette-swatch" data-color="#ec4899" title="Rosa"></div>
+                        <div class="palette-swatch" data-color="#78716c" title="Grigio"></div>
+                        <label class="custom-color-btn">
+                           <input type="color" id="canvas-color-input" value="#ef4444">
+                        </label>
+                    </div>
+                </div>
+                <div class="brush-size-container">
+                    <label for="canvas-brush-size">Spessore:</label>
+                    <input type="range" id="canvas-brush-size" min="1" max="50" value="5">
+                </div>
             </div>
             <canvas id="canvas"></canvas>
             <div class="modal-footer">
