@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
         space2: { avg: null, mode: null, canvasDataUrl: null }
     };
 
-    // --- SELETTORI DOM ---
     const canvasModalOverlay = document.getElementById('canvas-modal-overlay');
     const canvasEl = document.getElementById('canvas');
     const ctx = canvasEl.getContext('2d');
@@ -14,9 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNZIONI DI UTILITÀ COLORE ---
     const hexToRgb = (hex) => {
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
+        const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
         return { r, g, b };
     };
     const rgbToHex = (r, g, b) => "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
@@ -28,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tempCanvas.width = imageElement.naturalWidth || imageElement.width;
         tempCanvas.height = imageElement.naturalHeight || imageElement.height;
         const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
-        
         try {
             tempCtx.drawImage(imageElement, 0, 0);
             const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
@@ -45,9 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelCount === 0) return { avg: null, mode: null };
             const avg = { r: Math.round(rSum / pixelCount), g: Math.round(gSum / pixelCount), b: Math.round(bSum / pixelCount) };
             let maxFreq = 0, modeRgbKey = "";
-            for (const [key, freq] of colorFrequencies.entries()) {
-                if (freq > maxFreq) { maxFreq = freq; modeRgbKey = key; }
-            }
+            for (const [key, freq] of colorFrequencies.entries()) { if (freq > maxFreq) { maxFreq = freq; modeRgbKey = key; } }
             const [r_mode, g_mode, b_mode] = modeRgbKey.split(',').map(Number);
             const mode = { r: r_mode, g: g_mode, b: b_mode };
             return { avg, mode };
@@ -106,13 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const showPreview = (space, type, source) => {
         const spazioEl = document.getElementById(`spazio${space}`);
-        const placeholder = spazioEl.querySelector('.placeholder');
-        const previewImage = spazioEl.querySelector('.preview-image');
-        const previewColor = spazioEl.querySelector('.preview-color');
-        placeholder.style.display = 'none';
-        previewImage.style.display = 'none';
-        previewColor.style.display = 'none';
-
+        const placeholder = spazioEl.querySelector('.placeholder'), previewImage = spazioEl.querySelector('.preview-image'), previewColor = spazioEl.querySelector('.preview-color');
+        placeholder.style.display = 'none'; previewImage.style.display = 'none'; previewColor.style.display = 'none';
         if (type === 'image') {
             previewImage.crossOrigin = "Anonymous";
             previewImage.src = source;
@@ -121,20 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const results = calculateColors(previewImage);
                 if(results.avg === null && results.mode === null) {
                     placeholder.textContent = "URL non valido o inaccessibile";
-                    placeholder.style.display = 'block';
-                    previewImage.style.display = 'none';
+                    placeholder.style.display = 'block'; previewImage.style.display = 'none';
                 }
                 updateResultsUI(space, results);
             };
             previewImage.onerror = () => {
                 placeholder.textContent = "URL non valido o inaccessibile";
-                placeholder.style.display = 'block';
-                previewImage.style.display = 'none';
+                placeholder.style.display = 'block'; previewImage.style.display = 'none';
                 updateResultsUI(space, { avg: null, mode: null });
             };
         } else if (type === 'color') {
-            previewColor.style.backgroundColor = source;
-            previewColor.style.display = 'block';
+            previewColor.style.backgroundColor = source; previewColor.style.display = 'block';
             const rgb = hexToRgb(source);
             updateResultsUI(space, { avg: rgb, mode: rgb });
             state[`space${space}`].canvasDataUrl = null;
@@ -144,25 +130,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- GESTIONE EVENTI ---
     [1, 2].forEach(space => {
         const spazioEl = document.getElementById(`spazio${space}`);
-        spazioEl.querySelectorAll('input[name="source'+space+'"]').forEach(radio => radio.addEventListener('change', () => {
+        spazioEl.querySelectorAll(`input[name="source${space}"]`).forEach(radio => radio.addEventListener('change', () => {
              const selectedValue = radio.value;
-             document.querySelectorAll(`.input-wrapper[data-space="${space}"]`).forEach(wrapper => {
-                wrapper.style.display = wrapper.dataset.source === selectedValue ? 'flex' : 'none';
-             });
+             document.querySelectorAll(`.input-wrapper[data-space="${space}"]`).forEach(wrapper => { wrapper.style.display = wrapper.dataset.source === selectedValue ? 'flex' : 'none'; });
              resetSpace(space);
-             if(selectedValue === 'color'){ // Default per colore
-                spazioEl.querySelector('.palette-swatch').click();
-             }
+             if(selectedValue === 'color'){ spazioEl.querySelector('.palette-swatch').click(); }
         }));
         
         spazioEl.querySelector('input[type="file"]').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (event) => {
-                    state[`space${space}`].canvasDataUrl = null;
-                    showPreview(space, 'image', event.target.result);
-                }
+                reader.onload = (event) => { state[`space${space}`].canvasDataUrl = null; showPreview(space, 'image', event.target.result); }
                 reader.readAsDataURL(file);
             }
         });
@@ -196,12 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
             canvasModalOverlay.style.display = 'flex';
             resizeCanvas();
             const savedDrawing = state[`space${space}`].canvasDataUrl;
-            if (savedDrawing) {
-                const img = new Image();
-                img.onload = () => { ctx.drawImage(img, 0, 0); };
-                img.src = savedDrawing;
-            }
-            // Setta default colore canvas
+            if (savedDrawing) { const img = new Image(); img.onload = () => { ctx.drawImage(img, 0, 0); }; img.src = savedDrawing; }
             document.querySelector('#canvas-color-palette .palette-swatch').click();
         });
     });
@@ -209,18 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LOGICA CANVAS MODAL ---
     function resizeCanvas() {
         const savedContent = canvasEl.toDataURL();
-        // Usa il genitore per la larghezza, più affidabile
         canvasEl.width = canvasEl.parentElement.clientWidth;
-        canvasEl.height = window.innerHeight * 0.5;
+        const maxHeight = window.innerHeight * 0.9 - 200; // Calcola altezza massima disponibile
+        canvasEl.height = Math.min(canvasEl.parentElement.clientWidth / (4/3), maxHeight);
         const img = new Image();
-        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.onload = () => ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
         img.src = savedContent;
     }
-    window.addEventListener('resize', () => {
-        if (canvasModalOverlay.style.display !== 'none') {
-            resizeCanvas();
-        }
-    });
+    window.addEventListener('resize', () => { if (canvasModalOverlay.style.display !== 'none') { resizeCanvas(); } });
     
     function startPosition(e) { painting = true; draw(e); }
     function endPosition() { painting = false; ctx.beginPath(); }
@@ -238,14 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineCap = 'round';
         ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
     }
-    canvasEl.addEventListener('mousedown', startPosition);
-    canvasEl.addEventListener('mouseup', endPosition);
-    canvasEl.addEventListener('mousemove', draw);
-    canvasEl.addEventListener('touchstart', startPosition, { passive: false });
-    canvasEl.addEventListener('touchend', endPosition);
-    canvasEl.addEventListener('touchmove', draw, { passive: false });
+    ['mousedown', 'touchstart'].forEach(evt => canvasEl.addEventListener(evt, startPosition, { passive: false }));
+    ['mouseup', 'touchend', 'mouseleave'].forEach(evt => canvasEl.addEventListener(evt, endPosition));
+    ['mousemove', 'touchmove'].forEach(evt => canvasEl.addEventListener(evt, draw, { passive: false }));
     
-    // Eventi palette canvas
     const canvasPalette = document.getElementById('canvas-color-palette');
     canvasPalette.querySelectorAll('.palette-swatch').forEach(swatch => {
         swatch.style.backgroundColor = swatch.dataset.color;
@@ -264,9 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
         canvasModalOverlay.style.display = 'none';
     });
-    document.getElementById('canvas-clear-btn').addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-    });
+    document.getElementById('canvas-clear-btn').addEventListener('click', () => { ctx.clearRect(0, 0, canvasEl.width, canvasEl.height); });
     document.getElementById('canvas-save-btn').addEventListener('click', () => {
         const dataUrl = canvasEl.toDataURL('image/png');
         state[`space${currentDrawingSpace}`].canvasDataUrl = dataUrl;
